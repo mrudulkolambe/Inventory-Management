@@ -40,7 +40,6 @@ export function UserAuthContextProvider({ children }) {
 							department: department
 						});
 					}
-					console.log("Profile Created")
 				}).catch((error) => {
 					console.log(error)
 				});
@@ -62,6 +61,7 @@ export function UserAuthContextProvider({ children }) {
 				const user = userCredential.user;
 				console.log(user)
 				setUser(user)
+				navigate("/")
 			})
 			.catch((error) => {
 				console.log(error)
@@ -73,9 +73,6 @@ export function UserAuthContextProvider({ children }) {
 			setUser(currentuser);
 			if (!currentuser) {
 				navigate(`/login`);
-			}
-			else{
-				navigate("/")
 			}
 		});
 

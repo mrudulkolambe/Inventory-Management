@@ -4,9 +4,9 @@ import { useUserContext } from '../context/UseMembersContext';
 
 
 const Members = () => {
+	document.title = "SIGCE Inventory | All Members"
 	const navigate = useNavigate()
 	const { members } = useUserContext()
-	console.log(members)
 	const handleCopy = (context, target) => {
 		navigator.clipboard.writeText(context);
 	}
@@ -24,7 +24,6 @@ const Members = () => {
 				<tbody className='overflow-hidden bg-gray-500 bg-opacity-40 rounded-lg'>
 					{
 						members && members.map((member, i) => {
-							console.log(member)
 							return (
 								<tr key={member.uid} onDoubleClick={() => {navigate(`/user/${member.uid}`)}} className={i === members.length-1 ? "grid grid-cols-4 w-full justify-between p-3" : 'grid grid-cols-4 w-full justify-between p-3 border-b-2'}>
 									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Name")}}>{member.name}</td>

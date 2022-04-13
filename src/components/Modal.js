@@ -15,7 +15,6 @@ const Modal = ({ modalHeader, modalBody, btnText, flag, setFlag }) => {
 
 	const handleOpen = () => {
 		if (flag) {
-			console.log("first")
 			modal.current.style.display = "block";
 			backdrop.current.style.display = "block";
 			backdrop.current.classList.add("fade_in");
@@ -24,7 +23,6 @@ const Modal = ({ modalHeader, modalBody, btnText, flag, setFlag }) => {
 	}
 
 	useEffect(() => {
-		console.log(flag)
 		if (flag) {
 			handleOpen()
 		}

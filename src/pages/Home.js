@@ -2,6 +2,7 @@ import React from 'react'
 import HomeCard from '../components/HomeCard'
 
 const Home = () => {
+	document.title = "SIGCE Inventory | Home"
 	const cardArr = [
 		{
 			main: "Add",

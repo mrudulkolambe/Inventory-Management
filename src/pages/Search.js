@@ -2,6 +2,7 @@ import React from 'react'
 import HomeCard from '../components/HomeCard'
 
 const Search = () => {
+	document.title = "SIGCE Inventory | Search"
 	const cardArr = [
 		{
 			main: "Search",

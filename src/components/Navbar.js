@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useUserAuth } from '../context/UserAuthContext'
 
 const navigation = [
@@ -17,18 +17,12 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const { logOut, user } = useUserAuth()
+  const { logOut } = useUserAuth()
   const location = useLocation()
-  const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if (user) {
-  //     return
-  //   }
-  //   else{
-  //     navigate("/login")
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    
+  }, [location]);
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
       {({ open }) => (

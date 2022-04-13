@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { collection, onSnapshot, where, query, doc, updateDoc, arrayUnion, setDoc, deleteDoc } from "firebase/firestore";
+import { collection, onSnapshot, where, query, doc, updateDoc, arrayUnion, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from '../firebase_config';
 import Alert from '../components/Alert';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-const UpdateEquipment = ({ hide, searchHide }) => {
-	const navigate = useNavigate()
+const UpdateEquipment = ({ hide, searchHide, title }) => {
+	document.title = title
 	const { equipmentID } = useParams()
 	const submitBtnElem = document.getElementById('submitBtn');
 	const searchBtn = useRef()
@@ -27,8 +27,8 @@ const UpdateEquipment = ({ hide, searchHide }) => {
 		RepairingDate: "",
 		RepairedBy: "",
 		ReplacedComponents: "",
-		ExternalAgency: "",
-		AgencyInwardNo: ""
+		ExternalAgency: "-",
+		AgencyInwardNo: "-"
 	}
 	const [update, setUpdate] = useState(InitialState)
 	const scrapAddition = async () => {
@@ -48,33 +48,31 @@ const UpdateEquipment = ({ hide, searchHide }) => {
 			})
 	}
 	const fetchData = async (e) => {
-		e.preventDefault();
-		setSearchBtnText("Searching...")
-		searchBtn.current.disabled = true
-		const q = query(collection(db, "INVENTORY"), where("TagNo", "==", search));
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			querySnapshot.forEach((doc) => {
-				const doc_data = {
-					id: doc.id,
-					data: doc.data()
-				}
-				setEquipment(doc_data)
-				let newArr = doc_data.data.TestingReport
-				newArr.reverse()
-				console.log(newArr)
-				setArr(newArr)
+		if (search.length !== 0) {
+			setSearchBtnText("Searching...")
+			searchBtn.current.disabled = true
+			const q = query(collection(db, "INVENTORY"), where("TagNo", "==", search));
+			const unsubscribe = onSnapshot(q, (querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					const doc_data = {
+						id: doc.id,
+						data: doc.data()
+					}
+					setEquipment(doc_data)
+					let newArr = doc_data.data.TestingReport
+					newArr.reverse()
+					setArr(newArr)
+				});
 			});
-		});
-		setSearchBtnText("Search")
-		searchBtn.current.disabled = false
+			setSearchBtnText("Search")
+			searchBtn.current.disabled = false
+		}
 	}
 	const handleInput = (e) => {
 		const name = e.target.name
 		setUpdate({ ...update, [name]: e.target.value })
 	}
 	const handleSubmit = async () => {
-		console.log(update)
-		console.log(equipment)
 		if (required) {
 			const equipmentRef = doc(db, "INVENTORY", equipment && equipment.id);
 			await updateDoc(equipmentRef, {
@@ -106,7 +104,6 @@ const UpdateEquipment = ({ hide, searchHide }) => {
 	}, [update]);
 
 	useEffect(() => {
-		console.log(equipment)
 		if (required) {
 			submitBtn && submitBtn.current.classList.add("animate_btn")
 			submitBtn && submitBtn.current.classList.add("zindex1000")
@@ -120,15 +117,25 @@ const UpdateEquipment = ({ hide, searchHide }) => {
 	}, [required]);
 
 	useEffect(() => {
+		getData()
+	}, []);
+
+	const getData = async () => {
 		if (equipmentID && equipmentID.length !== 0) {
-			const unsub = onSnapshot(doc(db, "INVENTORY", equipmentID), (doc) => {
-				setEquipment({
-					id: doc.id,
-					data: doc.data()
+			await getDoc(doc(db, "INVENTORY", equipmentID))
+				.then((doc) => {
+					setEquipment({
+						id: equipmentID,
+						data: doc.data()
+					})
+					setSearch(doc.data().TagNo)
+					fetchData()
+					let newArr = doc.data().TestingReport
+					newArr.reverse()
+					setArr(newArr)
 				})
-			});
 		}
-	}, [equipmentID]);
+	}
 
 	const handleInputForm = () => {
 		if (showInputs) {

@@ -2,10 +2,10 @@ import React, { useRef, useState } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 import { db } from '../firebase_config'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Department = () => {
-	const navigate = useNavigate();
+	document.title = "SIGCE Inventory | Search By Department"
 	const { departmentArray } = useUserContext()
 	const [search, setSearch] = useState("");
 	const [searchBtnText, setSearchBtnText] = useState("Search");
@@ -58,14 +58,14 @@ const Department = () => {
 					</tr>
 					<div className='rounded-lg overflow-hidden'>
 						{
-							results && results.map(({data, id}, i) => {
+							results && results.map(({ data, id }, i) => {
 								return <tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
 									<td>{data.InwardNo}</td>
 									<td>{data.TagNo}</td>
 									<td>{data.Lab}</td>
 									<td>{data.EquipmentName}</td>
 									<td>{data.Specifications}</td>
-									<td className='text-blue-500 underline cursor-pointer' onClick={() => {navigate(`/equipment/${id}`)}}>{'Visit'}</td>
+									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{'Visit'}</Link></td>
 								</tr>
 							})
 						}

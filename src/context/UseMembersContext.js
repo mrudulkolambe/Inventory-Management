@@ -17,7 +17,6 @@ export function UserMemberContextProvider({ children }) {
 		if (user) {
 			const unsub = onSnapshot(doc(db, "ADMIN", "ADMIN"), (doc) => {
 				setAdmin(doc.data());
-				console.log(doc.data())
 			});
 			if (admin.uid === user.uid) {
 				const q = query(collection(db, "USERS"));
@@ -25,25 +24,17 @@ export function UserMemberContextProvider({ children }) {
 					let arr = [];
 					querySnapshot.forEach((doc) => {
 						arr.push(doc.data());
-						if (doc.data().admin) {
-							setAdmin(doc.data())
-						}
 					});
 					setMembers(arr)
-					console.log(members)
 				});
-				return () => {
-					unsubscribe()
-				};
 			}
-
 			return () => {
 				unsub()
 			};
 		}
 	}, [user]);
 	return (
-		<userMembersContext.Provider value={{ members,departmentArray }}>
+		<userMembersContext.Provider value={{ members, departmentArray }}>
 			{children}
 		</userMembersContext.Provider>
 	);

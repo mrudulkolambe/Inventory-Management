@@ -4,10 +4,8 @@ const Alert = ({ flag, message, messageSetter, type }) => {
   const alert_dom = useRef()
 
   useEffect(() => {
-    console.log(flag)
     if (flag) {
       const animate_alert = () => {
-        console.log(alert_dom)
         alert_dom.current.classList.add("show_alert");
         const timeOut = setTimeout(() => {
           alert_dom.current.classList.remove("show_alert");

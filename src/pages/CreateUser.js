@@ -4,6 +4,7 @@ import Modal from '../components/Modal';
 import { useUserContext } from '../context/UseMembersContext';
 
 const CreateUser = () => {
+	document.title = "SIGCE Inventory | Create User"
 	const [btnText, setbtnText] = useState("Create User");
 	const { departmentArray } = useUserContext()
 	const [name, setName] = useState("");

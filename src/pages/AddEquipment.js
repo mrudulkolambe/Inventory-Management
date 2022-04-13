@@ -5,6 +5,7 @@ import { db } from '../firebase_config';
 import Alert from '../components/Alert';
 
 const AddEquipment = () => {
+	document.title = "SIGCE Inventory | Add Equipment"
 	const { departmentArray } = useUserContext()
 	const btn = useRef()
 	const [flag, setFlag] = useState(false);

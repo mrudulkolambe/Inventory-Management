@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 
 const Login = () => {
+	document.title = "SIGCE Inventory | Login"
 	const [btnText, setbtnText] = useState("Login User");
 	const { login } = useUserAuth()
 

@@ -26,11 +26,11 @@ function App() {
             <Route path="/create" exact element={<CreateUser />} />
             <Route path="/members" exact element={<Members />} />
             <Route path="/add/equipment" exact element={<AddEquipment />} />
-            <Route path="/update/equipment" exact element={<UpdateEquipment />} />
+            <Route path="/update/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Update Equipment"}/>} />
             <Route path="/search" exact element={<Search/>} />
-            <Route path="/search/equipment" exact element={<UpdateEquipment />} />
+            <Route path="/search/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Search Equipment"} />} />
             <Route path="/search/department" exact element={<Department/>} />
-            <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment searchHide={true}/>} />
+            <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
           </Routes>
         </div>
       </UserMemberContextProvider>
