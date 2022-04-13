@@ -3,7 +3,7 @@ import { collection, onSnapshot, where, query, doc, updateDoc, arrayUnion } from
 import { db } from '../firebase_config';
 import Alert from '../components/Alert';
 
-const UpdateEquipment = () => {
+const UpdateEquipment = ({hide}) => {
 	const submitBtnElem = document.getElementById('submitBtn');
 	const searchBtn = useRef()
 	const submitBtn = useRef()
@@ -157,7 +157,7 @@ const UpdateEquipment = () => {
 						</div>
 					</table>
 				</div>
-				<button onClick={handleInputForm} className="m-auto my-7 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-40 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">{showInputs ? "Hide" : "Add Log"}</button>
+				<button onClick={handleInputForm} className={hide ? "hidden" : "m-auto my-7 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-40 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"}>{showInputs ? "Hide" : "Add Log"}</button>
 				<div className='w-full m-auto px-4'>
 					<form autoComplete='off'>
 						<table className='w-full m-auto text-center'>

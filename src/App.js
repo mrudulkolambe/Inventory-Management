@@ -25,6 +25,7 @@ function App() {
             <Route path="/user/:userID" exact element={<Members />} />
             <Route path="/add/equipment" exact element={<AddEquipment />} />
             <Route path="/update/equipment" exact element={<UpdateEquipment />} />
+            <Route path="/search/equipment" exact element={<UpdateEquipment hide={true}/>} />
           </Routes>
         </div>
       </UserMemberContextProvider>
