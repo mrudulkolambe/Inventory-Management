@@ -1,38 +1,82 @@
-.App {
+@import url("https://fonts.googleapis.com/css?family=Nunito:200,300,regular,500,600,700,800,900,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic");
+body {
+  outline: none;
+  font-family: "Nunito", sans-serif;
+  background-color: rgb(31, 41, 55);
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+}
+a {
+  outline: none;
+}
+.signup-input {
+  width: 47%;
+  outline: none;
+}
+.backdrop {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  display: none;
+}
+.modal {
+  position: fixed;
+  opacity: 0;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.3s ease-in;
+  z-index: 100;
+}
+.slide_out {
+  opacity: 0;
+  top: 80%;
+}
+.fade_out {
+  opacity: 0;
+  transition: 0.3s ease-in;
+  z-index: 0;
+}
+.fade_in {
+  opacity: 1;
+  transition: 0.3s ease-in;
+  z-index: 0;
+}
+.modal_in {
+  top: 50%;
+  opacity: 1;
+}
+.alert_pos {
+  position: fixed;
+  left: 50%;
+  top: -50%;
+  transform: translateX(-50%);
+  transition: 0.5s ease-in;
+}
+.show_alert {
+  top: 5%;
+}
+table input{
+  background: transparent ;
+  outline: none;
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.submitBtn{
+  transition: 0.4s;
+  top: -100px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.animate_btn{
+  top: 0;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.zindex1000{
+  z-index: 1000;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.zindex2000{
+  z-index: 2000;
 }
