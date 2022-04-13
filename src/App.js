@@ -10,6 +10,9 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import AddEquipment from './pages/AddEquipment';
 import UpdateEquipment from './pages/UpdateEquipment';
+import Search from './pages/Search';
+import Department from './pages/Department';
+import { useState } from 'react';
 
 function App() {
   return (
@@ -22,10 +25,12 @@ function App() {
             <Route path="/login" exact element={<Login />} />
             <Route path="/create" exact element={<CreateUser />} />
             <Route path="/members" exact element={<Members />} />
-            <Route path="/user/:userID" exact element={<Members />} />
             <Route path="/add/equipment" exact element={<AddEquipment />} />
             <Route path="/update/equipment" exact element={<UpdateEquipment />} />
-            <Route path="/search/equipment" exact element={<UpdateEquipment hide={true}/>} />
+            <Route path="/search" exact element={<Search/>} />
+            <Route path="/search/equipment" exact element={<UpdateEquipment />} />
+            <Route path="/search/department" exact element={<Department/>} />
+            <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment searchHide={true}/>} />
           </Routes>
         </div>
       </UserMemberContextProvider>

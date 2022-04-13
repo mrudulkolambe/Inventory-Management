@@ -1,25 +1,25 @@
 import React from 'react'
 import HomeCard from '../components/HomeCard'
 
-const Home = () => {
+const Search = () => {
 	const cardArr = [
 		{
-			main: "Add",
-			desc: "Add Equipment To Inventory",
-			icon: "Add",
-			link: "/add/equipment"
+			main: "Search",
+			desc: "Search By Department",
+			icon: "search",
+			link: "/search/department"
 		},
 		{
-			main: "Update",
-			desc: "Update Equipment In Inventory",
-			icon: "Update",
-			link: "/update/equipment"
+			main: "Search",
+			desc: "Search By Tag Number",
+			icon: "search",
+			link: "/search/equipment"
 		},
 		{
 			main: "Search",
 			desc: "Search Equipment In Inventory",
 			icon: "search",
-			link: "/search"
+			link: "/search/equipment"
 		}
 	]
 	return (
@@ -36,4 +36,4 @@ const Home = () => {
 	)
 }
 
-export default Home
+export default Search
