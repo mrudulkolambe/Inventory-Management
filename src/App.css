@@ -80,3 +80,9 @@ table input{
 .zindex2000{
   z-index: 2000;
 }
+
+@media print{
+  body{
+    background-color: black;
+  }
+}

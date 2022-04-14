@@ -24,7 +24,7 @@ const Alert = ({ flag, message, messageSetter, type }) => {
     <div
       id="alert-1"
       ref={alert_dom}
-      className={type === "blue" ? "bg-blue-100 absolute alert_pos flex p-4 mb-4 rounded-lg w-2/3 m-auto" : type === "red" ? "bg-red-100 absolute alert_pos flex p-4 mb-4 rounded-lg w-2/3 m-auto" : ""}
+      className={type === "blue" ? "bg-blue-100 absolute alert_pos flex p-4 mb-4 rounded-lg w-1/3 m-auto" : type === "red" ? "bg-red-100 absolute alert_pos flex p-4 mb-4 rounded-lg w-1/3 m-auto" : ""}
       role="alert"
     >
       <svg

@@ -1,21 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 import { db } from '../firebase_config'
 import { Link } from 'react-router-dom'
-import { CSVLink } from 'react-csv'
-import { json2csv } from 'json-2-csv'
 
-const Department = () => {
-	document.title = "SIGCE Inventory | Search By Department"
-	const { departmentArray, convertJSON } = useUserContext()
+const Scrap = () => {
+	document.title = "SIGCE Inventory | Scrap"
+	const { departmentArray } = useUserContext()
 	const [search, setSearch] = useState("");
 	const [searchBtnText, setSearchBtnText] = useState("Search");
 	const [results, setResults] = useState([]);
 	const searchBtn = useRef()
 	const fetchData = () => {
 		setSearchBtnText("Searching...")
-		const q = query(collection(db, "INVENTORY"), where("department", "==", search));
+
+	}
+	useEffect(() => {
+		const q = query(collection(db, "INVENTORY"), where("Scrap", "==", true));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			let arr = []
 			querySnapshot.forEach((doc) => {
@@ -27,26 +28,10 @@ const Department = () => {
 			setResults(arr)
 			setSearchBtnText("Search")
 		});
-	}
-	const [json, setJson] = useState([{ "id": "123456789" }]);
-	console.log(json)
-	useEffect(() => {
-		let row = []
-		results.forEach(({data}) => {
-			row.push(data)
-		})
-		json2csv(row, (err, csv) => {
-			if (err) {
-				console.log(err)
-			}
-			else{
-				console.log(csv)
-				setJson(csv)
-			}
-		})
-	}, [results]);
-
-	const [showDropdown, setShowDropdown] = useState(false)
+		return () => {
+			unsubscribe()
+		};
+	}, []);
 	return (
 		<>
 			<form className='w-full my-2 flex justify-center'>
@@ -66,85 +51,27 @@ const Department = () => {
 					<p>{searchBtnText}</p>
 				</button>
 			</form>
-			<div class="dropdown relative">
-				<button
-					className="m-6 my-3 ml-auto tracking-wide font-semibold bg-green-600 text-gray-100 w-40 py-3 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-					type="button"
-					onClick={() => {
-						setShowDropdown(showDropdown ? false : true)
-					}}
-				>
-					Export As
-					<svg
-						aria-hidden="true"
-						focusable="false"
-						data-prefix="fas"
-						data-icon="caret-down"
-						class="w-2 ml-2"
-						role="img"
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 320 512"
-					>
-						<path
-							fill="currentColor"
-							d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-						></path>
-					</svg>
-				</button>
-				<ul
-					className={showDropdown ? "w-36 right-6 text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95" : "hidden"}
-					aria-labelledby="dropdownMenuButton2"
-				>
-					<span
-						class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300"
-					>
-						<li className='rounded overflow-hidden cursor-pointer'>
-							<CSVLink data={json} filename={`${search}-Inventory.csv`}>
-								<a
-									class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
-								>
-									CSV
-								</a>
-							</CSVLink>
-						</li>
-						<li className='rounded overflow-hidden cursor-pointer'
-							onClick={() => {
-								setShowDropdown(false)
-								setTimeout(() => {
-									window.print()
-								}, 1000);
-							}}
-						>
-							<a
-								class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
-							>
-								PDF
-							</a>
-						</li>
-					</span>
-				</ul>
-			</div>
 
 			<div className='text-white mt-8'>
 				<table className='w-11/12 m-auto text-center'>
 					<tr className='grid grid-cols-6 font-bold justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 rounded-lg overflow-hidden mb-6'>
-						<th>Inward No.</th>
 						<th>Tag No.</th>
+						<th>Inward No.</th>
 						<th>Lab</th>
 						<th>Equipment</th>
 						<th>Specifications</th>
-						<th>Visit</th>
+						<th>Department</th>
 					</tr>
 					<div className='rounded-lg overflow-hidden'>
 						{
 							results && results.map(({ data, id }, i) => {
 								return <tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
+									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{data.TagNo}</Link></td>
 									<td>{data.InwardNo}</td>
-									<td>{data.TagNo}</td>
 									<td>{data.Lab}</td>
 									<td>{data.EquipmentName}</td>
 									<td>{data.Specifications}</td>
-									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{'Visit'}</Link></td>
+									<td>{data.department}</td>
 								</tr>
 							})
 						}
@@ -156,4 +83,4 @@ const Department = () => {
 	)
 }
 
-export default Department
+export default Scrap

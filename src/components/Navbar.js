@@ -1,28 +1,29 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { Link, useLocation } from 'react-router-dom'
 import { useUserAuth } from '../context/UserAuthContext'
 
-const navigation = [
-  { name: 'Home', to: '/', current: true },
-  { name: 'Members', to: '/members', current: false },
-  { name: 'Add Equipment', to: '/add/equipment', current: false },
-  { name: 'Update Equipment Record', to: '/update/equipment', current: false },
-  { name: 'Create User', to: '/create', current: false },
-]
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+
+
 
 export default function Navbar() {
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
   const { logOut } = useUserAuth()
   const location = useLocation()
-
-  useEffect(() => {
-    
-  }, [location]);
+  const InitialState = [
+    { name: 'Home', to: '/', current: true },
+    { name: 'Search', to: '/search', current: false },
+    { name: 'Members', to: '/members', current: false },
+    { name: 'Add Equipment', to: '/add/equipment', current: false },
+    { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+    { name: 'Scrap', to: '/scrap', current: false },
+    { name: 'Create User', to: '/create', current: false },
+  ]
+  const [navigation, setNavigation] = useState(InitialState);
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
       {({ open }) => (
@@ -55,15 +56,11 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {InitialState.map((item) => (
                       <Link
                         key={item.name}
                         to={item.to}
-                        className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-600 duration-200 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
+                        className='text-gray-300 hover:bg-gray-600 duration-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                       >
                         {item.name}
                       </Link>

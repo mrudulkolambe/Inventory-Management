@@ -12,14 +12,32 @@ import AddEquipment from './pages/AddEquipment';
 import UpdateEquipment from './pages/UpdateEquipment';
 import Search from './pages/Search';
 import Department from './pages/Department';
+import Scrap from './pages/Scrap';
 import { useState } from 'react';
 
 function App() {
+  const [hideNavbar, setHideNavbar] = useState(false);
+  const buttons = document.querySelectorAll('button');
+  window.addEventListener('beforeprint', () => {
+    buttons.forEach((button) => {
+      button.classList.add("hidden")
+    })
+    setHideNavbar(true)
+  })
+  window.addEventListener("error", () => {
+    console.clear()
+  })
+  window.addEventListener("afterprint", () => {
+    buttons.forEach((button) => {
+      button.classList.remove("hidden")
+    })
+    setHideNavbar(false)
+  })
   return (
     <UserAuthContextProvider>
       <UserMemberContextProvider>
         <div className="App">
-          <Navbar />
+         { hideNavbar ? null :  <Navbar /> }
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/login" exact element={<Login />} />
@@ -31,6 +49,7 @@ function App() {
             <Route path="/search/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Search Equipment"} />} />
             <Route path="/search/department" exact element={<Department/>} />
             <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
+            <Route path="/scrap" exact element={<Scrap/>} />
           </Routes>
         </div>
       </UserMemberContextProvider>

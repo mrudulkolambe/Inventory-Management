@@ -6,7 +6,7 @@ import Alert from '../components/Alert';
 
 const AddEquipment = () => {
 	document.title = "SIGCE Inventory | Add Equipment"
-	const { departmentArray } = useUserContext()
+	const { departmentArray, equipmentCheck, items } = useUserContext()
 	const btn = useRef()
 	const [flag, setFlag] = useState(false);
 	const [alertType, setAlertType] = useState("blue");
@@ -20,8 +20,11 @@ const AddEquipment = () => {
 		Supplier: "",
 		Cost: "",
 		Specifications: "",
-		Shifted: null,
-		TestingReport: []
+		Shifted: false,
+		ShiftedDate: null,
+		ShiftedTo: null,
+		Scrap: false,
+		ScrapDate: null
 	}
 	const call_alert = (content, type) => {
 		setFlag(true);
@@ -41,21 +44,27 @@ const AddEquipment = () => {
 			call_alert("Please Fill The Form Properly", "red")
 		}
 		else {
-			setBtnText("Adding Equipment...");
-			btn.current.disabled = true;
-			await addDoc(collection(db, "INVENTORY"), data)
-				.then((docRef) => {
-					setBtnText("Equipment Added")
-					setData(InitialState)
-					call_alert("Equipment Added", "blue")
-					setTimeout(() => {
-						btn.current.disabled = false;
-						setBtnText("Add Equipment")
-					}, 2000);
-				})
-				.catch((error) => {
-					console.log(error)
-				})
+			if (items.includes(data.TagNo)) {
+				call_alert("Item Already Exists", "red")
+			}
+			else {
+				setBtnText("Adding Equipment...");
+				btn.current.disabled = true;
+				await addDoc(collection(db, "INVENTORY"), data)
+					.then(() => {
+						equipmentCheck(data.TagNo)
+						setBtnText("Equipment Added")
+						setData(InitialState)
+						call_alert("Equipment Added", "blue")
+						setTimeout(() => {
+							btn.current.disabled = false;
+							setBtnText("Add Equipment")
+						}, 2000);
+					})
+					.catch((error) => {
+						console.log(error)
+					})
+			}
 		}
 	}
 	const handleForm = (e) => {
