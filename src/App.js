@@ -14,6 +14,7 @@ import Search from './pages/Search';
 import Department from './pages/Department';
 import Scrap from './pages/Scrap';
 import { useState } from 'react';
+import Profile from './pages/Profile';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/search/department" exact element={<Department/>} />
             <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
             <Route path="/scrap" exact element={<Scrap/>} />
+            {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>
       </UserMemberContextProvider>

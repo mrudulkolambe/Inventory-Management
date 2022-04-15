@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 
 const Login = () => {
 	document.title = "SIGCE Inventory | Login"
@@ -8,6 +9,7 @@ const Login = () => {
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [show, setShow] = useState(true)
 	const handleClick = () => {
 		setbtnText("Loading...")
 		login(email, password)
@@ -15,7 +17,6 @@ const Login = () => {
 		setEmail("")
 		setPassword("")
 	}
-	const [modal, setModal] = useState(false)
 
 	return (
 		<>
@@ -32,7 +33,7 @@ const Login = () => {
 							Login User
 						</h1>
 						<div className="w-3/4 flex-1 mt-8">
-						
+
 							<input
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
 								type="email"
@@ -40,13 +41,19 @@ const Login = () => {
 								onChange={(e) => { setEmail(e.target.value) }}
 								placeholder="Email"
 							/>
-							<input
-								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-								type="password"
-								value={password}
-								onChange={(e) => { setPassword(e.target.value) }}
-								placeholder="Password"
-							/>
+							<div className='relative'>
+								<input
+									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+									type={show ? "password" : "text"}
+									value={password}
+									onChange={(e) => { setPassword(e.target.value) }}
+									placeholder="Password"
+								/>
+								<div onClick={() => { show ? setShow(false) : setShow(true) }}>
+									{show ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
+										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
+								</div>
+							</div>
 							<button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleClick} type="button">
 								<svg
 									className="w-6 h-6 -ml-2"

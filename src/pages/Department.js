@@ -32,14 +32,14 @@ const Department = () => {
 	console.log(json)
 	useEffect(() => {
 		let row = []
-		results.forEach(({data}) => {
+		results.forEach(({ data }) => {
 			row.push(data)
 		})
 		json2csv(row, (err, csv) => {
 			if (err) {
 				console.log(err)
 			}
-			else{
+			else {
 				console.log(csv)
 				setJson(csv)
 			}
@@ -66,7 +66,7 @@ const Department = () => {
 					<p>{searchBtnText}</p>
 				</button>
 			</form>
-			<div class="dropdown relative">
+			<div className="dropdown relative">
 				<button
 					className="m-6 my-3 ml-auto tracking-wide font-semibold bg-green-600 text-gray-100 w-40 py-3 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
 					type="button"
@@ -80,7 +80,7 @@ const Department = () => {
 						focusable="false"
 						data-prefix="fas"
 						data-icon="caret-down"
-						class="w-2 ml-2"
+						className="w-2 ml-2"
 						role="img"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 320 512"
@@ -96,12 +96,12 @@ const Department = () => {
 					aria-labelledby="dropdownMenuButton2"
 				>
 					<span
-						class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300"
+						className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300"
 					>
 						<li className='rounded overflow-hidden cursor-pointer'>
 							<CSVLink data={json} filename={`${search}-Inventory.csv`}>
 								<a
-									class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
+									className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
 								>
 									CSV
 								</a>
@@ -116,7 +116,7 @@ const Department = () => {
 							}}
 						>
 							<a
-								class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
+								className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
 							>
 								PDF
 							</a>
@@ -138,14 +138,16 @@ const Department = () => {
 					<div className='rounded-lg overflow-hidden'>
 						{
 							results && results.map(({ data, id }, i) => {
-								return <tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
-									<td>{data.InwardNo}</td>
-									<td>{data.TagNo}</td>
-									<td>{data.Lab}</td>
-									<td>{data.EquipmentName}</td>
-									<td>{data.Specifications}</td>
-									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{'Visit'}</Link></td>
-								</tr>
+								return <div className={data.Scrap ? "bg-red-700 bg-opacity-50" : ""}>
+									<tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
+										<td>{data.InwardNo}</td>
+										<td>{data.TagNo}</td>
+										<td>{data.Lab}</td>
+										<td>{data.EquipmentName}</td>
+										<td>{data.Specifications}</td>
+										<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{'Visit'}</Link></td>
+									</tr>
+								</div>
 							})
 						}
 					</div>

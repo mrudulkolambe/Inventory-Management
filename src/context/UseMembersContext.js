@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../firebase_config"
 import { collection, query, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useUserAuth } from "./UserAuthContext";
-import { CSVLink, CSVDownload } from "react-csv";
 
 
 
@@ -13,26 +12,20 @@ export function UserMemberContextProvider({ children }) {
 	const [members, setMembers] = useState([]);
 	const [admin, setAdmin] = useState({})
 	const [items, setItems] = useState([]);
-	const departmentArray = ["Mechanical", "Electrical", "Computer", "CSE AIML", "CSE IOT", "Office", "Account", "First year", "Principal cabin", "Vice principal cabin", "T&P section", "EXTC"]
-
-	const convertJSON = (data) => {
-		// console.log(data[0])
-		if (data.length !== 0) {
-			console.log(data)
-			const headers = data && Object.keys(data[0].data)
-			let arr = []
-			data.forEach(({ data }) => {
-				let row = data && Object.values(data)
-				arr.push(row)
-			})
-			const csvData = {
-				filename: "newFile.csv",
-				headers,
-				data: arr
-			}
-			console.log(csvData)
-			return csvData
+	const departmentArray = ["All" , "Mechanical", "Electrical", "Computer", "CSE AIML", "CSE IOT", "Office", "Account", "First year", "Principal cabin", "Vice principal cabin", "T&P section", "EXTC"]
+	const getDate = () => {
+		const dateObj = new Date();
+		let date = dateObj.getDate();
+		if (date <= 9) {
+			date = `0${date}`
 		}
+		let month = dateObj.getMonth();
+		if (month <= 9) {
+			month = `0${month}`
+		}
+		let year = dateObj.getFullYear();
+		const dateString = `${year}-${month}-${date}`
+		return dateString
 	}
 
 	const equipmentCheck = async (TagNo) => {
@@ -42,6 +35,7 @@ export function UserMemberContextProvider({ children }) {
 		});
 	}
 	useEffect(() => {
+		setMembers([])
 		if (user) {
 			const unsub = onSnapshot(doc(db, "ADMIN", "ADMIN"), (doc) => {
 				setAdmin(doc.data());
@@ -56,6 +50,9 @@ export function UserMemberContextProvider({ children }) {
 					setMembers(arr)
 				});
 			}
+			else {
+				setMembers([])
+			}
 			onSnapshot(doc(db, "EQUIPMENTS", "TAGNO"), (doc) => {
 				setItems(doc.data().TAGNO)
 			});
@@ -65,7 +62,7 @@ export function UserMemberContextProvider({ children }) {
 		}
 	}, [user]);
 	return (
-		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, convertJSON }}>
+		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, getDate }}>
 			{children}
 		</userMembersContext.Provider>
 	);

@@ -1,15 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from '../firebase_config';
 import Alert from '../components/Alert';
+import { useUserAuth } from '../context/UserAuthContext';
 
 const AddEquipment = () => {
 	document.title = "SIGCE Inventory | Add Equipment"
-	const { departmentArray, equipmentCheck, items } = useUserContext()
+	const { departmentArray, equipmentCheck, items, getDate } = useUserContext()
 	const btn = useRef()
 	const [flag, setFlag] = useState(false);
 	const [alertType, setAlertType] = useState("blue");
+	const { user } = useUserAuth()
 	const InitialState = {
 		department: "",
 		Lab: "",
@@ -24,7 +26,10 @@ const AddEquipment = () => {
 		ShiftedDate: null,
 		ShiftedTo: null,
 		Scrap: false,
-		ScrapDate: null
+		ScrapDate: null,
+		date: getDate(),
+		timestamp: serverTimestamp(),
+		user: user && user.displayName
 	}
 	const call_alert = (content, type) => {
 		setFlag(true);
@@ -50,7 +55,9 @@ const AddEquipment = () => {
 			else {
 				setBtnText("Adding Equipment...");
 				btn.current.disabled = true;
-				await addDoc(collection(db, "INVENTORY"), data)
+				let newData = data;
+				newData.user = user.displayName
+				await addDoc(collection(db, "INVENTORY"), newData)
 					.then(() => {
 						equipmentCheck(data.TagNo)
 						setBtnText("Equipment Added")

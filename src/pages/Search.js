@@ -20,7 +20,7 @@ const Search = () => {
 			main: "Search",
 			desc: "Search Equipment In Inventory",
 			icon: "search",
-			link: "/search/equipment"
+			link: "/search/"
 		}
 	]
 	return (
@@ -29,7 +29,7 @@ const Search = () => {
 			<div className='flex justify-evenly items-center mt-36 px-14'>
 				{
 					cardArr.map((card) => {
-						return <HomeCard key={card.link} main={card.main} desc={card.desc} icon={card.icon} link={card.link} />
+						return <HomeCard mark={true} key={card.link} main={card.main} desc={card.desc} icon={card.icon} link={card.link} />
 					})
 				}
 			</div>

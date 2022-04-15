@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import Modal from '../components/Modal';
 import { useUserContext } from '../context/UseMembersContext';
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 
 const CreateUser = () => {
 	document.title = "SIGCE Inventory | Create User"
@@ -23,11 +24,11 @@ const CreateUser = () => {
 		setPassword("")
 	}
 	const [modal, setModal] = useState(false)
-
+	const [show, setShow] = useState(true)
 	const { createAccount } = useUserAuth()
 	return (
 		<>
-		<Modal flag={modal} setFlag={setModal} modalHeader={"Created Used Successfully"} modalBody={"Email: mrudulKolambe02@gmail.com"} btnText={"Copy"}/>
+			<Modal flag={modal} setFlag={setModal} modalHeader={"Created Used Successfully"} modalBody={"Email: mrudulKolambe02@gmail.com"} btnText={"Copy"} />
 			<div className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
 				<div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-l-lg">
 					<div
@@ -45,10 +46,10 @@ const CreateUser = () => {
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
 								type="text"
 								value={name}
-								onChange={(e) => {setName(e.target.value)}}
+								onChange={(e) => { setName(e.target.value) }}
 								placeholder="Name"
 							/>
-							<select className='w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5' value={department} onChange={(e) => {setDepartment(e.target.value)}}>
+							<select className='w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5' value={department} onChange={(e) => { setDepartment(e.target.value) }}>
 								{
 									departmentArray.map((departmentName) => {
 										return <option value={departmentName} key={departmentName}>{departmentName}</option>
@@ -59,16 +60,22 @@ const CreateUser = () => {
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
 								type="email"
 								value={email}
-								onChange={(e) => {setEmail(e.target.value)}}
+								onChange={(e) => { setEmail(e.target.value) }}
 								placeholder="Email"
 							/>
-							<input
-								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-								type="password"
-								value={password}
-								onChange={(e) => {setPassword(e.target.value)}}
-								placeholder="Password"
-							/>
+							<div className='relative'>
+								<input
+									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+									type={show ? "password" : "text"}
+									value={password}
+									onChange={(e) => { setPassword(e.target.value) }}
+									placeholder="Password"
+								/>
+								<div onClick={() => { show ? setShow(false) : setShow(true) }}>
+									{show ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
+										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
+								</div>
+							</div>
 							<button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleClick} type="button">
 								<svg
 									className="w-6 h-6 -ml-2"

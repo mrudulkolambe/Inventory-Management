@@ -29,7 +29,6 @@ export function UserAuthContextProvider({ children }) {
 				updateProfile(auth.currentUser, {
 					displayName: name
 				}).then(async () => {
-					console.log(user)
 					if (isUser) {
 						await setDoc(doc(db, "USERS", user.uid), {
 							name: user.displayName,
@@ -73,6 +72,9 @@ export function UserAuthContextProvider({ children }) {
 			setUser(currentuser);
 			if (!currentuser) {
 				navigate(`/login`);
+			}
+			else{
+				// navigate('/')
 			}
 		});
 
