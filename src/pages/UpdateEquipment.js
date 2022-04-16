@@ -60,14 +60,11 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
 
 	const xlsConvert = () => {
 		setShowDropdown(false)
-		console.log(equipment.data)
 		const headers = Object.keys(equipment.data);
-		console.log(headers)
 		const body = Object.values(equipment.data)
 		const worksheet1 = utils.json_to_sheet([headers, body]);
 		const worksheet2 = utils.json_to_sheet(arr);
 		const excelBuffer = write({Sheets: { 'Equipement Data': worksheet1, 'Testing Report': worksheet2 }, SheetNames: ['Equipement Data', 'Testing Report'] }, {bookType: "xlsx", type: "array"})
-		console.log(excelBuffer)
 		saveAsFile(excelBuffer, `${equipment.data.TagNo}-${equipment.data.department}`)
 	}
 	const saveAsFile = (buffer, filename) => {
@@ -123,7 +120,6 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
 			let newUpdate = update;
 			newUpdate.timestamp = serverTimestamp()
 			const docRef = await addDoc(collection(db, "INVENTORY", equipment.id, "TESTINGREPORT"), newUpdate);
-			console.log("Document written with ID: ", docRef.id);
 			setUpdate(InitialState)
 		}
 		else {

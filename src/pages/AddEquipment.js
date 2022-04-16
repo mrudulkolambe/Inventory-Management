@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from '../firebase_config';
@@ -7,10 +7,11 @@ import { useUserAuth } from '../context/UserAuthContext';
 
 const AddEquipment = () => {
 	document.title = "SIGCE Inventory | Add Equipment"
-	const { departmentArray, equipmentCheck, items, getDate } = useUserContext()
+	const { departmentArray, equipmentCheck, items, getDate, allDepts } = useUserContext()
 	const btn = useRef()
 	const [flag, setFlag] = useState(false);
 	const [alertType, setAlertType] = useState("blue");
+	const [labs, setLabs] = useState([]);
 	const { user } = useUserAuth()
 	const InitialState = {
 		department: "",
@@ -31,6 +32,11 @@ const AddEquipment = () => {
 		timestamp: serverTimestamp(),
 		user: user && user.displayName
 	}
+	const [data, setData] = useState(InitialState);
+	useEffect(() => {
+		const { department } = data;
+		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : setLabs([])
+	}, [data.department]);
 	const call_alert = (content, type) => {
 		setFlag(true);
 		setMessage(content);
@@ -41,7 +47,7 @@ const AddEquipment = () => {
 		}, 10);
 	};
 
-	const [data, setData] = useState(InitialState);
+
 	const [btnText, setBtnText] = useState("Add Equipment");
 	const [message, setMessage] = useState("");
 	const addData = async () => {
@@ -90,20 +96,25 @@ const AddEquipment = () => {
 							<select name='department' value={data.department} onChange={handleForm} className='w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1'>
 								{
 									departmentArray.map((department) => {
-										return <option key={department} value={department}>{department}</option>
+										return <option key={department} value={department}>{department.length === 0 ? "Select The Department" : `${department}`}</option>
 									})
 								}
 							</select>
 						</div>
 						<div className='w-full my-2 flex flex-col items-end'>
 							<label className=' text-white self-start ml-9'>Name Of Lab : </label>
-							<input
-								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
-								type="text"
+							<select className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+							disabled={data.department.length === 0}
 								name='Lab'
 								value={data.Lab} onChange={handleForm}
-								placeholder="Name Of Lab"
-							/>
+							>
+								{
+								data.department.length === 0 ? 
+								<option key="" value="">{"---Choose Department---"}</option> : 
+								labs.map((lab) => {
+									return <option value={lab} key={lab}>{ lab.length === 0 ? "---Choose Option---" : `${lab}`}</option>
+								})}
+							</select>
 						</div>
 					</div>
 					<div className='w-full flex justify-between'>

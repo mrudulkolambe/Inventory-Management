@@ -12,7 +12,15 @@ export function UserMemberContextProvider({ children }) {
 	const [members, setMembers] = useState([]);
 	const [admin, setAdmin] = useState({})
 	const [items, setItems] = useState([]);
-	const departmentArray = ["All" , "Mechanical", "Electrical", "Computer", "CSE AIML", "CSE IOT", "Office", "Account", "First year", "Principal cabin", "Vice principal cabin", "T&P section", "EXTC"]
+	const departmentArray = ["", "All" , "Mechanical", "Electrical", "Computer", "CSE AIML", "CSE IOT", "Office", "Account", "First year", "Principal cabin", "Vice principal cabin", "T&P section", "EXTC"]
+	const ElectricalDept = ["", "Computer Lab", "EMC Lab", "EEM Lab", "BEE Lab", "EN Lab", "PSE Lab", "Basic and power Electronic's Lab"];
+	const MechanicalDept = ["", "Fluid Mechanics/Turbo Machinary", "Heating Ventilation Air Conditioning & Refrigeration", "Material Testing Lab", "Mechanical Measurements Lab", "CAD-Modelling & Machine Designing", "Finite Element Analysis & CAD CAM"];
+	const ExtcDept = ["", "Communication Lab", "Advance Communication Lab", "EDC Lab", " SD & C Lab", "CCN Lab", "DTSP Lab", "MP Lab", "Project Lab"];
+	const FEDept = ["", "Chemistry", "Physics", "BEE Lab", "SPA Lab", "Language Lab"];
+	const AIMLDept = ["", "AIML Lab-1", "AIML Lab-2", "AIML Lab-3"];
+	const CompsDept = ["", "SE Lab", "CG Lab", "AC Lab", "NW Lab", "DBMS Lab", "MM Lab"]
+	const allDepts = {"Electrical": ElectricalDept, "Mechanical": MechanicalDept, "EXTC": ExtcDept, "First_year": FEDept, "CSE_AIML": AIMLDept, "Computer": CompsDept}
+
 	const getDate = () => {
 		const dateObj = new Date();
 		let date = dateObj.getDate();
@@ -62,7 +70,7 @@ export function UserMemberContextProvider({ children }) {
 		}
 	}, [user]);
 	return (
-		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, getDate }}>
+		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, getDate, allDepts }}>
 			{children}
 		</userMembersContext.Provider>
 	);

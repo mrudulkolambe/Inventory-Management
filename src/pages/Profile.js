@@ -45,7 +45,6 @@ const Profile = () => {
 			.then(() => {
 				console.log(user)
 			})
-			// console.log("first")
 			// await updateDoc(doc(db, "USERS", user.uid), {
 			// 	password: password
 			// });

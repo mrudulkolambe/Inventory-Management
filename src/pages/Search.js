@@ -18,9 +18,9 @@ const Search = () => {
 		},
 		{
 			main: "Search",
-			desc: "Search Equipment In Inventory",
+			desc: "Search By Lab Name",
 			icon: "search",
-			link: "/search/"
+			link: "/search/lab"
 		}
 	]
 	return (

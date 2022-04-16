@@ -48,7 +48,8 @@ function App() {
             <Route path="/update/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Update Equipment"}/>} />
             <Route path="/search" exact element={<Search/>} />
             <Route path="/search/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Search Equipment"} />} />
-            <Route path="/search/department" exact element={<Department/>} />
+            <Route path="/search/department" exact element={<Department lab={false}/>} />
+            <Route path="/search/lab" exact element={<Department lab={true}/>} />
             <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
             <Route path="/scrap" exact element={<Scrap/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
