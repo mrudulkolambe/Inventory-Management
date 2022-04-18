@@ -35,7 +35,7 @@ const AddEquipment = () => {
 	const [data, setData] = useState(InitialState);
 	useEffect(() => {
 		const { department } = data;
-		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : setLabs([])
+		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : department === "CSE IOT" ? setLabs(allDepts.CSE_IOT) : department === "Account" ? setLabs(allDepts.Account) : department === "Principal Cabin" ? setLabs(allDepts.Principal_Cabin) : department === "Vice Principal Cabin" ? setLabs(allDepts.Vice_Principal_Cabin) : department === "T & P section" ? setLabs(allDepts.TandP) : department === "Office" ? setLabs(allDepts.Office) : setLabs([])
 	}, [data.department]);
 	const call_alert = (content, type) => {
 		setFlag(true);
@@ -108,6 +108,7 @@ const AddEquipment = () => {
 								name='Lab'
 								value={data.Lab} onChange={handleForm}
 							>
+								{data.Lab}
 								{
 								data.department.length === 0 ? 
 								<option key="" value="">{"---Choose Department---"}</option> : 

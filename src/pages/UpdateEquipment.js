@@ -136,7 +136,7 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
 		}, 10);
 	};
 	useEffect(() => {
-		if (update.TestingDate.length <= 3 || update.ProblemsAndDetails.length <= 3 || update.RepairingDate.length <= 3 || update.RepairedBy.length <= 3 || update.ReplacedComponents.length <= 3) {
+		if (update.TestingDate.length <= 3 || update.ProblemsAndDetails.length <= 3 || update.RepairingDate.length <= 3 || update.RepairedBy.length <= 3 || update.ReplacedComponents.length < 3) {
 			setRequired(false)
 		} else {
 			setRequired(true)

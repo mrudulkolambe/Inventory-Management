@@ -11,11 +11,13 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(true)
 	const handleClick = () => {
-		setbtnText("Loading...")
+		setbtnText("Logging In...")
 		login(email, password)
-		setbtnText("Logged In")
 		setEmail("")
 		setPassword("")
+		setTimeout(() => {
+			setbtnText("Login User")
+		}, 2000);
 	}
 
 	return (

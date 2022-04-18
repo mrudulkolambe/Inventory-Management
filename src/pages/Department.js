@@ -63,8 +63,7 @@ const Department = ({ lab }) => {
 		})
 	}, [results]);
 	useEffect(() => {
-		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : setLabs([])
-		department.length === 0 ? setSearch("") : setSearch(search)
+		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : department === "CSE IOT" ? setLabs(allDepts.CSE_IOT) : department === "Account" ? setLabs(allDepts.Account) : department === "Principal Cabin" ? setLabs(allDepts.Principal_Cabin) : department === "Vice Principal Cabin" ? setLabs(allDepts.Vice_Principal_Cabin) : department === "T & P section" ? setLabs(allDepts.TandP) : department === "Office" ? setLabs(allDepts.Office) : setLabs([])
 	}, [department]);
 	const [showDropdown, setShowDropdown] = useState(false)
 	return (
@@ -166,8 +165,8 @@ const Department = ({ lab }) => {
 					</tr>
 					<div className='rounded-lg overflow-hidden'>
 						{
-							results && results.map(({ data, id }, i) => {
-								return <div className={data.Scrap ? "bg-red-700 bg-opacity-50" : ""}>
+							results.length === 0 ? <p>{"No Results Found"}</p> : results.map(({ data, id }, i) => {
+								return <div title={data.Scrap ? "Scrapped" : `${data.TagNo}`} className={data.Scrap ? "bg-red-700 bg-opacity-50" : ""}>
 									<tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
 										<td>{data.InwardNo}</td>
 										<td>{data.TagNo}</td>

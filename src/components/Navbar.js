@@ -3,8 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useUserAuth } from '../context/UserAuthContext'
-
-
+import { useUserContext } from '../context/UseMembersContext'
 
 
 
@@ -14,26 +13,41 @@ export default function Navbar() {
   }
   const navigate = useNavigate()
   const { logOut, user } = useUserAuth()
+  const { admin } = useUserContext()
   const location = useLocation()
-  // useEffect(() => {
-  //   if (user && user.uid) {
-  //     console.log(user)
-  //   }
-  //   else {
-  //     navigate("/login")
-  //   }
-  // }, []);
 
   const InitialState = [
-    { name: 'Home', to: '/', current: true },
+    { name: 'Home', to: '/', current: false },
     { name: 'Search', to: '/search', current: false },
-    { name: 'Members', to: '/members', current: false },
     { name: 'Add Equipment', to: '/add/equipment', current: false },
     { name: 'Update Equipment Record', to: '/update/equipment', current: false },
     { name: 'Scrap', to: '/scrap', current: false },
-    { name: 'Create User', to: '/create', current: false },
   ]
   const [navigation, setNavigation] = useState(InitialState);
+
+  useEffect(() => {
+    if (user && user.uid === admin.uid) {
+      setNavigation([
+        { name: 'Home', to: '/', current: false },
+        { name: 'Search', to: '/search', current: false },
+        { name: 'Members', to: '/members', current: true },
+        { name: 'Add Equipment', to: '/add/equipment', current: false },
+        { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+        { name: 'Scrap', to: '/scrap', current: false },
+        { name: 'Create User', to: '/create', current: true },
+      ])
+    }
+    else {
+      setNavigation([
+        { name: 'Home', to: '/', current: false },
+        { name: 'Search', to: '/search', current: false },
+        { name: 'Add Equipment', to: '/add/equipment', current: false },
+        { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+        { name: 'Scrap', to: '/scrap', current: false },
+      ])
+    }
+  }, [user]);
+
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
       {({ open }) => (
@@ -60,8 +74,8 @@ export default function Navbar() {
                   <p className='ml-3 text-white font-medium text-xl'>SIGCE INVENTORY</p>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
-                    {InitialState.map((item) => (
+                  <div className={user ? "flex space-x-4" : "hidden"}>
+                    {navigation.map((item) => (
                       <Link
                         key={item.name}
                         to={item.to}
@@ -76,61 +90,71 @@ export default function Navbar() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                      <Menu.Item className="hidden">
-                        {({ active }) => (
-                          <Link
-                            to={"/profile"}
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                {user ?
+                  <Menu as="div" className="ml-3 relative">
+                    <div>
+                      <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span className="sr-only">Open user menu</span>
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png"
+                          alt=""
+                        />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                        <Menu.Item className="hidden">
+                          {({ active }) => (
+                            <Link
+                              to={"/profile"}
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
 
-                          >
-                            Your Profile
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item className="hidden">
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            onClick={() => { logOut() }}
-                            className={classNames(active ? 'bg-gray-100' : '', 'cursor-pointer block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                            >
+                              Your Profile
+                            </Link>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item className="hidden">
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Settings
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              onClick={() => { logOut() }}
+                              className={classNames(active ? 'bg-gray-100' : '', 'cursor-pointer block px-4 py-2 text-sm text-gray-700')}
+                            >
+                              Sign out
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                  :
+                  <Link
+                    key={"Login"}
+                    to={"/login"}
+                    className='bg-gray-900 text-gray-300 hover:bg-gray-600 duration-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                  >
+                    {"Login"}
+                  </Link>
+                }
               </div>
             </div>
           </div>

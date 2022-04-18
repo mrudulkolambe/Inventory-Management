@@ -64,6 +64,7 @@ export function UserAuthContextProvider({ children }) {
 			})
 			.catch((error) => {
 				console.log(error)
+				return error
 			});
 	}
 
