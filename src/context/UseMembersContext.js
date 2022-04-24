@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../firebase_config"
-import { collection, query, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, query, onSnapshot, doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import { useUserAuth } from "./UserAuthContext";
 
 
@@ -12,20 +12,11 @@ export function UserMemberContextProvider({ children }) {
 	const [members, setMembers] = useState([]);
 	const [admin, setAdmin] = useState({})
 	const [items, setItems] = useState([]);
-	const departmentArray = ["", "All" , "Mechanical", "Electrical", "Computer", "CSE AIML", "CSE IOT", "Office", "Account", "First year", "Principal Cabin", "Vice Principal Cabin", "T & P section", "EXTC"]
-	const ElectricalDept = ["", "Computer Lab", "EMC Lab", "EEM Lab", "BEE Lab", "EN Lab", "PSE Lab", "Basic and power Electronic's Lab"];
-	const MechanicalDept = ["", "Fluid Mechanics/Turbo Machinary", "Heating Ventilation Air Conditioning & Refrigeration", "Material Testing Lab", "Mechanical Measurements Lab", "CAD-Modelling & Machine Designing", "Finite Element Analysis & CAD CAM"];
-	const ExtcDept = ["", "Communication Lab", "Advance Communication Lab", "EDC Lab", " SD & C Lab", "CCN Lab", "DTSP Lab", "MP Lab", "Project Lab"];
-	const FEDept = ["", "Chemistry", "Physics", "BEE Lab", "SPA Lab", "Language Lab"];
-	const AIMLDept = ["", "AIML Lab-1", "AIML Lab-2", "AIML Lab-3"];
-	const IOTDept = ["", "IOT Lab-1", "IOT Lab-2", "IOT Lab-3"];
-	const Account = ["", "Account"];
-	const PrincipalCabin = ["", "Principal Cabin"];
-	const VicePrincipalCabin = ["", "Vice Principal Cabin"];
-	const TandP = ["", "T & P Section"];
-	const Office = ["", "Office"];
-	const CompsDept = ["", "SE Lab", "CG Lab", "AC Lab", "NW Lab", "DBMS Lab", "MM Lab"]
-	const allDepts = {"Electrical": ElectricalDept, "Mechanical": MechanicalDept, "EXTC": ExtcDept, "First_year": FEDept, "CSE_AIML": AIMLDept, "Computer": CompsDept, "CSE_IOT": IOTDept, "Account": Account, "Principal_Cabin": PrincipalCabin, "Vice_Principal_Cabin": VicePrincipalCabin, "TandP": TandP, "Office": Office}
+	const [departmentArray, setdepartmentArray] = useState([]);
+	const [allDepts, setAllDepts] = useState([])
+	const [equipmentItem, setEquipmentItem] = useState([])
+	const [userData, setUserData] = useState({})
+	const [allDeptArr, setAllDeptArr] = useState([])
 
 	const getDate = () => {
 		const dateObj = new Date();
@@ -49,7 +40,6 @@ export function UserMemberContextProvider({ children }) {
 		});
 	}
 	useEffect(() => {
-		setMembers([])
 		if (user) {
 			const unsub = onSnapshot(doc(db, "ADMIN", "ADMIN"), (doc) => {
 				setAdmin(doc.data());
@@ -66,17 +56,54 @@ export function UserMemberContextProvider({ children }) {
 			}
 			else {
 				setMembers([])
+				const unsub4 = onSnapshot(doc(db, "USERS", user.uid), (doc) => {
+					setUserData(doc.data());
+				});
 			}
-			onSnapshot(doc(db, "EQUIPMENTS", "TAGNO"), (doc) => {
+			const unsub1 = onSnapshot(doc(db, "EQUIPMENTS", "TAGNO"), (doc) => {
 				setItems(doc.data().TAGNO)
+			});
+			const unsub2 = onSnapshot(doc(db, "LABS", "LABS"), (doc) => {
+				setAllDepts(doc.data().LABS)
+			});
+			const unsub3 = onSnapshot(doc(db, "ITEMS", "ITEMS"), (doc) => {
+				setEquipmentItem(doc.data().ITEMS)
 			});
 			return () => {
 				unsub()
+				unsub1()
+				unsub2()
+				unsub3()
 			};
 		}
 	}, [user]);
+	useEffect(() => {
+		if (userData) {
+			const unsub1 = onSnapshot(doc(db, "DEPARTMENTS", "DEPARTMENTS"), (doc) => {
+				let newArr = []
+				setAllDeptArr(doc.data().DEPARTMENTS)
+				if (userData.department === "ALL") {
+					setdepartmentArray(doc.data().DEPARTMENTS)
+				}
+				else {
+					doc.data().DEPARTMENTS.map((department) => {
+						if (userData.department === department) {
+							newArr.push(department)
+						}
+						else if(department === ""){
+							newArr.push(department)
+						}
+					})
+					setdepartmentArray(newArr)
+				}
+			});
+			return () => {
+				unsub1()
+			};
+		}
+	}, [userData]);
 	return (
-		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, getDate, allDepts, admin }}>
+		<userMembersContext.Provider value={{ members, departmentArray, equipmentCheck, items, getDate, allDepts, admin, equipmentItem, allDeptArr }}>
 			{children}
 		</userMembersContext.Provider>
 	);

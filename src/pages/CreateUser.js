@@ -7,28 +7,26 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 const CreateUser = () => {
 	document.title = "SIGCE Inventory | Create User"
 	const [btnText, setbtnText] = useState("Create User");
-	const { departmentArray } = useUserContext()
 	const [name, setName] = useState("");
-	const [department, setDepartment] = useState("");
 	const [email, setEmail] = useState("");
+	const [department, setDepartment] = useState("");
 	const [password, setPassword] = useState("");
+	const [confpassword, setConfPassword] = useState("");
+	const { departmentArray } = useUserContext()
 	const handleClick = () => {
-		setModal(true);
 		setbtnText("Loading...")
 		const admin = true
 		createAccount(email, password, name, admin, department)
 		setbtnText("User Created")
 		setName("")
-		setDepartment("")
 		setEmail("")
 		setPassword("")
 	}
-	const [modal, setModal] = useState(false)
-	const [show, setShow] = useState(true)
+	const [show1, setShow1] = useState(true)
+	const [show2, setShow2] = useState(true)
 	const { createAccount } = useUserAuth()
 	return (
 		<>
-			<Modal flag={modal} setFlag={setModal} modalHeader={"Created Used Successfully"} modalBody={"Email: mrudulKolambe02@gmail.com"} btnText={"Copy"} />
 			<div className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
 				<div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-l-lg">
 					<div
@@ -49,13 +47,6 @@ const CreateUser = () => {
 								onChange={(e) => { setName(e.target.value) }}
 								placeholder="Name"
 							/>
-							<select className='w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5' value={department} onChange={(e) => { setDepartment(e.target.value) }}>
-								{
-									departmentArray.map((departmentName) => {
-										return <option value={departmentName} key={departmentName}>{departmentName}</option>
-									})
-								}
-							</select>
 							<input
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
 								type="email"
@@ -63,16 +54,40 @@ const CreateUser = () => {
 								onChange={(e) => { setEmail(e.target.value) }}
 								placeholder="Email"
 							/>
+							<select
+								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+								value={department}
+								onChange={(e) => { setDepartment(e.target.value.toUpperCase()) }}
+							>
+								{
+									departmentArray && departmentArray.map((department) => {
+										return <option value={department} key={department}>{department.length === 0 ? "---choose option---" : department}</option>
+									})
+								}
+							</select>
 							<div className='relative'>
 								<input
 									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-									type={show ? "password" : "text"}
+									type={show1 ? "password" : "text"}
 									value={password}
 									onChange={(e) => { setPassword(e.target.value) }}
 									placeholder="Password"
 								/>
-								<div onClick={() => { show ? setShow(false) : setShow(true) }}>
-									{show ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
+								<div onClick={() => { show1 ? setShow1(false) : setShow1(true) }}>
+									{show1 ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
+										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
+								</div>
+							</div>
+							<div className='relative'>
+								<input
+									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+									type={show2 ? "password" : "text"}
+									value={confpassword}
+									onChange={(e) => { setConfPassword(e.target.value) }}
+									placeholder="Confirm Password"
+								/>
+								<div onClick={() => { show2 ? setShow2(false) : setShow2(true) }}>
+									{show2 ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
 										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
 								</div>
 							</div>

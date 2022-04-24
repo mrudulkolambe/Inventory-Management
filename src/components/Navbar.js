@@ -26,7 +26,7 @@ export default function Navbar() {
   const [navigation, setNavigation] = useState(InitialState);
 
   useEffect(() => {
-    if (user && user.uid === admin.uid) {
+    if (user && admin && user.uid === admin.uid) {
       setNavigation([
         { name: 'Home', to: '/', current: false },
         { name: 'Search', to: '/search', current: false },
@@ -35,6 +35,7 @@ export default function Navbar() {
         { name: 'Update Equipment Record', to: '/update/equipment', current: false },
         { name: 'Scrap', to: '/scrap', current: false },
         { name: 'Create User', to: '/create', current: true },
+        { name: 'Admin Panel', to: '/admin', current: true },
       ])
     }
     else {
@@ -46,7 +47,7 @@ export default function Navbar() {
         { name: 'Scrap', to: '/scrap', current: false },
       ])
     }
-  }, [user]);
+  }, [user, admin, location]);
 
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
@@ -139,7 +140,7 @@ export default function Navbar() {
                               onClick={() => { logOut() }}
                               className={classNames(active ? 'bg-gray-100' : '', 'cursor-pointer block px-4 py-2 text-sm text-gray-700')}
                             >
-                              Sign out
+                              Sign Out
                             </a>
                           )}
                         </Menu.Item>

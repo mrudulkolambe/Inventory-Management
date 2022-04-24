@@ -7,8 +7,12 @@ const Members = () => {
 	document.title = "SIGCE Inventory | All Members"
 	const navigate = useNavigate()
 	const { members } = useUserContext()
-	const handleCopy = (context, target) => {
+	const handleCopy = (context, target, e, text) => {
 		navigator.clipboard.writeText(context);
+		e.target.innerHTML = "Copied!"
+		setTimeout(() => {
+			e.target.innerHTML = text
+		}, 2000);
 	}
 	return (
 		<div className='h-full w-full flex justify-center'>
@@ -26,9 +30,9 @@ const Members = () => {
 						members && members.map((member, i) => {
 							return (
 								<tr key={member.uid} onDoubleClick={() => {navigate(`/user/${member.uid}`)}} className={i === members.length-1 ? "grid grid-cols-4 w-full justify-between p-3" : 'grid grid-cols-4 w-full justify-between p-3 border-b-2'}>
-									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Name")}}>{member.name}</td>
-									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Email")}}>{member.email}</td>
-									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Password")}}>{member.password}</td>
+									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Name", e, member.name)}}>{member.name}</td>
+									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Email", e, member.email)}}>{member.email}</td>
+									<td className='m-auto cursor-pointer' title='Click To Copy' onClick={(e) => {handleCopy(e.target.innerHTML, "Password", e, atob(member.password))}}>{atob(member.password)}</td>
 									<td className='m-auto'>{member.department}</td>
 								</tr>
 							)

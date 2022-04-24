@@ -7,7 +7,7 @@ import { useUserAuth } from '../context/UserAuthContext';
 
 const AddEquipment = () => {
 	document.title = "SIGCE Inventory | Add Equipment"
-	const { departmentArray, equipmentCheck, items, getDate, allDepts } = useUserContext()
+	const { departmentArray, equipmentCheck, items, getDate, allDepts, equipmentItem } = useUserContext()
 	const btn = useRef()
 	const [flag, setFlag] = useState(false);
 	const [alertType, setAlertType] = useState("blue");
@@ -25,18 +25,32 @@ const AddEquipment = () => {
 		Specifications: "",
 		Shifted: false,
 		ShiftedDate: null,
-		ShiftedTo: null,
+		ShiftedFromDept: null,
+		ShiftedFromLab: null,
 		Scrap: false,
+		Brand: "",
 		ScrapDate: null,
+		BillNumber: "",
+		TotalIncTaxes: "",
 		date: getDate(),
 		timestamp: serverTimestamp(),
-		user: user && user.displayName
+		user: ""
 	}
 	const [data, setData] = useState(InitialState);
 	useEffect(() => {
 		const { department } = data;
-		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : department === "CSE IOT" ? setLabs(allDepts.CSE_IOT) : department === "Account" ? setLabs(allDepts.Account) : department === "Principal Cabin" ? setLabs(allDepts.Principal_Cabin) : department === "Vice Principal Cabin" ? setLabs(allDepts.Vice_Principal_Cabin) : department === "T & P section" ? setLabs(allDepts.TandP) : department === "Office" ? setLabs(allDepts.Office) : setLabs([])
-	}, [data.department]);
+		if (allDepts !== undefined) {
+			let newArr2 = []
+			allDepts.map((item) => {
+				if (item.includes(department)) {
+					newArr2.push(item.replace(`${department} `, ''))
+				} else if (item === "") {
+					newArr2.push(item)
+				}
+			})
+			setLabs(newArr2)
+		}
+	}, [data.department, allDepts]);
 	const call_alert = (content, type) => {
 		setFlag(true);
 		setMessage(content);
@@ -63,6 +77,7 @@ const AddEquipment = () => {
 				btn.current.disabled = true;
 				let newData = data;
 				newData.user = user.displayName
+				newData.TagNo = data.TagNo.toUpperCase()
 				await addDoc(collection(db, "INVENTORY"), newData)
 					.then(() => {
 						equipmentCheck(data.TagNo)
@@ -88,8 +103,33 @@ const AddEquipment = () => {
 		<>
 			<Alert message={message} messageSetter={setMessage} flag={flag} type={alertType} />
 			<form autoComplete='off' >
-
 				<div className=' w-7/12 m-auto mt-8'>
+					<div className='w-full flex justify-between'>
+						<div className='w-full my-2 flex flex-col'>
+							<label className=' text-white'>Name Of Equipment : </label>
+							<select className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="text"
+								name='EquipmentName'
+								value={data.EquipmentName} onChange={handleForm}
+								placeholder="Name Of Equipment">
+								{
+									equipmentItem && equipmentItem.map((item) => {
+										return <option value={item} key={item}>{item.length === 0 ? "---Choose Option---" : item}</option>
+									})
+								}
+							</select>
+						</div>
+						<div className='w-full my-2 flex flex-col items-end'>
+							<label className=' text-white self-start ml-9'>Date Of Purchase : </label>
+							<input
+								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="date"
+								name='DateOfPurchase'
+								value={data.DateOfPurchase} onChange={handleForm}
+								placeholder="Date Of Purchase"
+							/>
+						</div>
+					</div>
 					<div className='w-full flex justify-between'>
 						<div className='w-full my-2 flex flex-col'>
 							<label className=' text-white'>Department :</label>
@@ -104,17 +144,17 @@ const AddEquipment = () => {
 						<div className='w-full my-2 flex flex-col items-end'>
 							<label className=' text-white self-start ml-9'>Name Of Lab : </label>
 							<select className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
-							disabled={data.department.length === 0}
+								disabled={data.department.length === 0}
 								name='Lab'
 								value={data.Lab} onChange={handleForm}
 							>
 								{data.Lab}
 								{
-								data.department.length === 0 ? 
-								<option key="" value="">{"---Choose Department---"}</option> : 
-								labs.map((lab) => {
-									return <option value={lab} key={lab}>{ lab.length === 0 ? "---Choose Option---" : `${lab}`}</option>
-								})}
+									data.department.length === 0 ?
+										<option key="" value="">{"---Choose Department---"}</option> :
+										labs.map((lab) => {
+											return <option value={lab} key={lab}>{lab.length === 0 ? "---Choose Option---" : `${lab}`}</option>
+										})}
 							</select>
 						</div>
 					</div>
@@ -140,28 +180,7 @@ const AddEquipment = () => {
 							/>
 						</div>
 					</div>
-					<div className='w-full flex justify-between'>
-						<div className='w-full my-2 flex flex-col'>
-							<label className=' text-white'>Name Of Equipment : </label>
-							<input
-								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
-								type="text"
-								name='EquipmentName'
-								value={data.EquipmentName} onChange={handleForm}
-								placeholder="Name Of Equipment"
-							/>
-						</div>
-						<div className='w-full my-2 flex flex-col items-end'>
-							<label className=' text-white self-start ml-9'>Date Of Purchase : </label>
-							<input
-								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
-								type="date"
-								name='DateOfPurchase'
-								value={data.DateOfPurchase} onChange={handleForm}
-								placeholder="Date Of Purchase"
-							/>
-						</div>
-					</div>
+
 					<div className='w-full flex justify-between'>
 						<div className='w-full my-2 flex flex-col'>
 							<label className='text-white'>Supplier Name : </label>
@@ -184,6 +203,38 @@ const AddEquipment = () => {
 							/>
 						</div>
 					</div>
+					<div className='w-full flex justify-between'>
+						<div className='w-full my-2 flex flex-col'>
+							<label className='text-white'>Brand Name : </label>
+							<input
+								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="text"
+								name='Brand'
+								value={data.Brand} onChange={handleForm}
+								placeholder="Brand Name"
+							/>
+						</div>
+						<div className='w-full my-2 flex flex-col items-end'>
+							<label className='text-white self-start ml-9'>Bill Number : </label>
+							<input
+								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="text"
+								name='BillNumber'
+								value={data.BillNumber} onChange={handleForm}
+								placeholder="Bill Number"
+							/>
+						</div>
+					</div>
+				</div>
+				<div className='w-7/12 my-2 flex flex-col m-auto'>
+					<label className='text-white'>Total Cost Incl. Taxes : </label>
+					<input
+						className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+						type="text"
+						name='TotalIncTaxes'
+						value={data.TotalIncTaxes} onChange={handleForm}
+						placeholder="Total Cost Incl. Taxes"
+					/>
 				</div>
 				<div className='w-7/12 my-2 flex flex-col m-auto'>
 					<label className='text-white'>Specifications Of Equipment : </label>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 
-const Login = () => {
+const Login = ({user}) => {
 	document.title = "SIGCE Inventory | Login"
 	const [btnText, setbtnText] = useState("Login User");
 	const { login } = useUserAuth()
@@ -32,7 +32,7 @@ const Login = () => {
 				<form className="lg:w-1/2 xl:w-6/12 p-6 sm:p-12 py-3" autoComplete="off">
 					<div className="my-12 flex flex-col items-center">
 						<h1 className="text-4xl font-extrabold">
-							Login User
+							Login {user}
 						</h1>
 						<div className="w-3/4 flex-1 mt-8">
 

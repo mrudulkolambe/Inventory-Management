@@ -18,7 +18,10 @@ export function UserAuthContextProvider({ children }) {
 	const [user, setUser] = useState({});
 
 	function logOut() {
-		return signOut(auth);
+		return signOut(auth)
+		.then(() => {
+			window.location.reload()
+		})
 	}
 
 	const createAccount = (email, password, name, isUser, department) => {
@@ -34,9 +37,9 @@ export function UserAuthContextProvider({ children }) {
 							name: user.displayName,
 							email: user.email,
 							admin: false,
-							password: password,
+							password: btoa(password),
+							department: department,
 							uid: user.uid,
-							department: department
 						});
 					}
 				}).catch((error) => {

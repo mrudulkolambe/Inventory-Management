@@ -100,7 +100,7 @@ const Scrap = () => {
 					</svg>
 				</button>
 				<ul
-					className={showDropdown ? "w-36 right-6 text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95" : "hidden"}
+					className={showDropdown ? "w-36 right-6 text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95" : "hidden"}
 					aria-labelledby="dropdownMenuButton2"
 				>
 					<span
@@ -145,6 +145,7 @@ const Scrap = () => {
 					</tr>
 					<div className='rounded-lg overflow-hidden'>
 						{
+							searchResults.length === 0 ? <div className='text-lg font-bold'>No Scrapped Item Found!</div> :
 							searchResults && searchResults.map(({ data, id }, i) => {
 								return <tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
 									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{data.TagNo}</Link></td>

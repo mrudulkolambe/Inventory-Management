@@ -63,8 +63,20 @@ const Department = ({ lab }) => {
 		})
 	}, [results]);
 	useEffect(() => {
-		department === "EXTC" ? setLabs(allDepts.EXTC) : department === "Electrical" ? setLabs(allDepts.Electrical) : department === "Mechanical" ? setLabs(allDepts.Mechanical) : department === "CSE AIML" ? setLabs(allDepts.CSE_AIML) : department === "First year" ? setLabs(allDepts.First_year) : department === "Computer" ? setLabs(allDepts.Computer) : department === "CSE IOT" ? setLabs(allDepts.CSE_IOT) : department === "Account" ? setLabs(allDepts.Account) : department === "Principal Cabin" ? setLabs(allDepts.Principal_Cabin) : department === "Vice Principal Cabin" ? setLabs(allDepts.Vice_Principal_Cabin) : department === "T & P section" ? setLabs(allDepts.TandP) : department === "Office" ? setLabs(allDepts.Office) : setLabs([])
-	}, [department]);
+		if (allDepts !== undefined) {
+			if (allDepts !== undefined) {
+				let newArr2 = []
+				allDepts.map((item) => {
+					if (item.includes(department)) {
+						newArr2.push(item.replace(`${department} `, ''))
+					}else if(item === ""){
+						newArr2.push(item)
+					}
+				})
+				setLabs(newArr2)
+			}
+		}
+	}, [department, allDepts]);
 	const [showDropdown, setShowDropdown] = useState(false)
 	return (
 		<>
@@ -120,7 +132,7 @@ const Department = ({ lab }) => {
 					</svg>
 				</button>
 				<ul
-					className={showDropdown ? "w-36 right-6 text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95" : "hidden"}
+					className={showDropdown ? "w-36 right-6 text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95" : "hidden"}
 					aria-labelledby="dropdownMenuButton2"
 				>
 					<span

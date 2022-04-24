@@ -15,6 +15,7 @@ import Department from './pages/Department';
 import Scrap from './pages/Scrap';
 import { useState } from 'react';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -26,7 +27,7 @@ function App() {
     setHideNavbar(true)
   })
   window.addEventListener("error", () => {
-    console.clear()
+    // console.clear()
   })
   window.addEventListener("afterprint", () => {
     buttons.forEach((button) => {
@@ -41,7 +42,7 @@ function App() {
          { hideNavbar ? null :  <Navbar /> }
           <Routes>
             <Route path="/" exact element={<Home />} />
-            <Route path="/login" exact element={<Login />} />
+            <Route path="/login" exact element={<Login user={"User"}/>} />
             <Route path="/create" exact element={<CreateUser />} />
             <Route path="/members" exact element={<Members />} />
             <Route path="/add/equipment" exact element={<AddEquipment />} />
@@ -52,6 +53,7 @@ function App() {
             <Route path="/search/lab" exact element={<Department lab={true}/>} />
             <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
             <Route path="/scrap" exact element={<Scrap/>} />
+            <Route path="/admin" exact element={<Admin/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>
