@@ -167,7 +167,7 @@ const Department = ({ lab }) => {
 
 			<div className='text-white mt-8'>
 				<table className='w-11/12 m-auto text-center'>
-					<tr className='grid grid-cols-6 font-bold justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 rounded-lg overflow-hidden mb-6'>
+					<tr className='grid grid-cols-6 font-bold justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 rounded-lg mb-6'>
 						<th>Inward No.</th>
 						<th>Tag No.</th>
 						<th>Lab</th>
@@ -175,11 +175,11 @@ const Department = ({ lab }) => {
 						<th>Specifications</th>
 						<th>Visit</th>
 					</tr>
-					<div className='rounded-lg overflow-hidden'>
+					<div className='rounded-lg'>
 						{
 							results.length === 0 ? <p>{"No Results Found"}</p> : results.map(({ data, id }, i) => {
-								return <div title={data.Scrap ? "Scrapped" : `${data.TagNo}`} className={data.Scrap ? "bg-red-700 bg-opacity-50" : ""}>
-									<tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
+								return <div data-title={data.user} className={data.Scrap ? "title bg-red-700 bg-opacity-50" : "title"}>
+									<tr  key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
 										<td>{data.InwardNo}</td>
 										<td>{data.TagNo}</td>
 										<td>{data.Lab}</td>

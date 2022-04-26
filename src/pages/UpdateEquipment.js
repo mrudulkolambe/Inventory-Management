@@ -526,7 +526,7 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
             <ul
               className={
                 showDropdown
-                  ? "w-full text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95"
+                  ? "w-full text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95"
                   : "hidden"
               }
               aria-labelledby="dropdownMenuButton2"

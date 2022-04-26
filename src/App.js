@@ -16,6 +16,7 @@ import Scrap from './pages/Scrap';
 import { useState } from 'react';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
+import ManageUser from './pages/ManageUser';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -54,6 +55,7 @@ function App() {
             <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
             <Route path="/scrap" exact element={<Scrap/>} />
             <Route path="/admin" exact element={<Admin/>} />
+            <Route path="/manage/user/:uid" exact element={<ManageUser/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>

@@ -41,6 +41,7 @@ const Admin = () => {
   const addLab = async () => {
     const docRef = doc(db, "LABS", "LABS");
     setLabData(`${department} ${lab}`)
+    console.log(labData)
     await updateDoc(docRef, {
       LABS: arrayUnion(labData)
     }).then(() => {
@@ -106,6 +107,7 @@ const Admin = () => {
           }
         </div>
       </div>
+        {/* <p className='text-white text-center mt-4 cursor-pointer title' data-title='Hover'>hey</p> */}
     </>
   )
 }
