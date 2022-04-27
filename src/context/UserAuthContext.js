@@ -7,7 +7,7 @@ import {
 	updateProfile,
 	signInWithEmailAndPassword
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"
+import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore"
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase_config";
 
@@ -15,16 +15,16 @@ const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ children }) {
 	const navigate = useNavigate();
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState();
 
-	function logOut() {
-		return signOut(auth)
-		.then(() => {
-			window.location.reload()
-		})
+	const logOut = () => {
+		signOut(auth)
+			.then(() => {
+				window.location.reload()
+			})
 	}
 
-	const createAccount = (email, password, name, isUser, department) => {
+	const createAccount = (email, password, name, admin, department) => {
 		createUserWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
 				const user = userCredential.user;
@@ -32,16 +32,21 @@ export function UserAuthContextProvider({ children }) {
 				updateProfile(auth.currentUser, {
 					displayName: name
 				}).then(async () => {
-					if (isUser) {
-						await setDoc(doc(db, "USERS", user.uid), {
-							name: user.displayName,
-							email: user.email,
-							admin: false,
-							password: btoa(password),
-							department: department,
-							uid: user.uid,
-						});
-					}
+					await setDoc(doc(db, "USERS", user.uid), {
+						name: user.displayName,
+						email: user.email,
+						admin: admin,
+						password: btoa(password),
+						department: department,
+						uid: user.uid,
+					})
+						.then(async () => {
+							if (admin) {
+								await updateDoc(doc(db, "ADMIN", "ADMIN"), {
+									ADMINS: arrayUnion(user.uid)
+								})
+							}
+						})
 				}).catch((error) => {
 					console.log(error)
 				});
@@ -77,7 +82,7 @@ export function UserAuthContextProvider({ children }) {
 			if (!currentuser) {
 				navigate(`/login`);
 			}
-			else{
+			else {
 				// navigate('/')
 			}
 		});

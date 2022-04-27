@@ -7,19 +7,19 @@ const Search = () => {
 		{
 			main: "Search",
 			desc: "Search By Department",
-			icon: "search",
+			icon: "department",
 			link: "/search/department"
 		},
 		{
 			main: "Search",
 			desc: "Search By Tag Number",
-			icon: "search",
+			icon: "hashTag",
 			link: "/search/equipment"
 		},
 		{
 			main: "Search",
 			desc: "Search By Lab Name",
-			icon: "search",
+			icon: "lab",
 			link: "/search/lab"
 		}
 	]

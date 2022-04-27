@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
-import Modal from '../components/Modal';
 import { useUserContext } from '../context/UseMembersContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
+import Alert from "../components/Alert"
 
 const CreateUser = () => {
 	document.title = "SIGCE Inventory | Create User"
@@ -13,20 +13,38 @@ const CreateUser = () => {
 	const [password, setPassword] = useState("");
 	const [confpassword, setConfPassword] = useState("");
 	const { departmentArray } = useUserContext()
+	const [admin, setAdmin] = useState(false);
+	const [flag, setFlag] = useState(false);
+	const [message, setMessage] = useState("");
+	const [alertType, setAlertType] = useState("blue");
 	const handleClick = () => {
-		setbtnText("Loading...")
-		const admin = true
-		createAccount(email, password, name, admin, department)
-		setbtnText("User Created")
-		setName("")
-		setEmail("")
-		setPassword("")
+		if (admin !== null) {
+			console.log(department)
+			setbtnText("Loading...")
+			createAccount(email, password, name, admin, department)
+			setbtnText("User Created")
+			setName("")
+			setEmail("")
+			setPassword("")
+			setAdmin("")
+		} else {
+			call_alert("Set The User Type", "red")
+		}
 	}
+	const call_alert = (content, type) => {
+		setFlag(true);
+		setMessage(content);
+		setAlertType(type)
+		const timeout = setTimeout(() => {
+			setFlag(false);
+			clearTimeout(timeout);
+		}, 10);
+	};
 	const [show1, setShow1] = useState(true)
-	const [show2, setShow2] = useState(true)
 	const { createAccount } = useUserAuth()
 	return (
 		<>
+			<Alert message={message} messageSetter={setMessage} flag={flag} type={alertType} />
 			<div className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
 				<div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-l-lg">
 					<div
@@ -65,6 +83,15 @@ const CreateUser = () => {
 									})
 								}
 							</select>
+							<select
+								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+								value={admin === null ? "" : admin ? "ADMIN" : "USER"}
+								onChange={(e) => { setAdmin(e.target.value === "" ? null : e.target.value === "ADMIN" ? true : false) }}
+							>
+								<option value={""} key={""}>{"---Choose User Type---"}</option>
+								<option value={"ADMIN"} key={"ADMIN"}>{"ADMIN"}</option>
+								<option value={"USER"} key={"USER"}>{"USER"}</option>
+							</select>
 							<div className='relative'>
 								<input
 									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
@@ -75,19 +102,6 @@ const CreateUser = () => {
 								/>
 								<div onClick={() => { show1 ? setShow1(false) : setShow1(true) }}>
 									{show1 ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
-										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
-								</div>
-							</div>
-							<div className='relative'>
-								<input
-									className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-									type={show2 ? "password" : "text"}
-									value={confpassword}
-									onChange={(e) => { setConfPassword(e.target.value) }}
-									placeholder="Confirm Password"
-								/>
-								<div onClick={() => { show2 ? setShow2(false) : setShow2(true) }}>
-									{show2 ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
 										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
 								</div>
 							</div>

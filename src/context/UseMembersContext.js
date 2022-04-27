@@ -10,7 +10,7 @@ const userMembersContext = createContext();
 export function UserMemberContextProvider({ children }) {
 	const { user } = useUserAuth()
 	const [members, setMembers] = useState([]);
-	const [admin, setAdmin] = useState({})
+	const [admin, setAdmin] = useState([])
 	const [items, setItems] = useState([]);
 	const [departmentArray, setdepartmentArray] = useState([]);
 	const [allDepts, setAllDepts] = useState([])
@@ -42,24 +42,11 @@ export function UserMemberContextProvider({ children }) {
 	useEffect(() => {
 		if (user) {
 			const unsub = onSnapshot(doc(db, "ADMIN", "ADMIN"), (doc) => {
-				setAdmin(doc.data());
+				setAdmin(doc.data().ADMINS);
 			});
-			if (admin.uid === user.uid) {
-				const q = query(collection(db, "USERS"));
-				const unsubscribe = onSnapshot(q, (querySnapshot) => {
-					let arr = [];
-					querySnapshot.forEach((doc) => {
-						arr.push(doc.data());
-					});
-					setMembers(arr)
-				});
-			}
-			else {
-				setMembers([])
-				const unsub4 = onSnapshot(doc(db, "USERS", user.uid), (doc) => {
-					setUserData(doc.data());
-				});
-			}
+			const unsub4 = onSnapshot(doc(db, "USERS", user.uid), (doc) => {
+				setUserData(doc.data());
+			});
 			const unsub1 = onSnapshot(doc(db, "EQUIPMENTS", "TAGNO"), (doc) => {
 				setItems(doc.data().TAGNO)
 			});
@@ -74,15 +61,32 @@ export function UserMemberContextProvider({ children }) {
 				unsub1()
 				unsub2()
 				unsub3()
+				unsub4()
 			};
 		}
 	}, [user]);
 	useEffect(() => {
-		if (userData) {
+		if (admin) {
+			const q = query(collection(db, "USERS"));
+			const unsubscribe = onSnapshot(q, (querySnapshot) => {
+				let arr = [];
+				querySnapshot.forEach((doc) => {
+					arr.push(doc.data());
+				});
+				setMembers(arr)
+			});
+			return () => {
+				unsubscribe()
+			};
+		}
+	}, [admin])
+
+	useEffect(() => {
+		if (userData && user) {
 			const unsub1 = onSnapshot(doc(db, "DEPARTMENTS", "DEPARTMENTS"), (doc) => {
 				let newArr = []
 				setAllDeptArr(doc.data().DEPARTMENTS)
-				if (userData.department === "ALL") {
+				if (userData.department === "ALL" || userData.admin) {
 					setdepartmentArray(doc.data().DEPARTMENTS)
 				}
 				else {
@@ -90,7 +94,7 @@ export function UserMemberContextProvider({ children }) {
 						if (userData.department === department) {
 							newArr.push(department)
 						}
-						else if(department === ""){
+						else if (department === "") {
 							newArr.push(department)
 						}
 					})

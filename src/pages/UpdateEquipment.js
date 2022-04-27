@@ -223,18 +223,18 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
   };
   const shiftAddition = async () => {
     console.log(allDeptArr);
-	const docRef = doc(db, "INVENTORY", equipment.id);
-	await updateDoc(docRef, {
-		Shifted: true,
-		ShiftedDate: getDate(),
-		ShiftedFromDept: equipment.data.department,
-		ShiftedFromLab: equipment.data.Lab,
-		department: department,
-		Lab: labData
-	}).then(() => {
-		call_alert(`${equipment.data.EquipmentName} shifted to Department: ${department} - Lab: ${labData}`, "blue");
-		setShowShift(false)
-	})
+    const docRef = doc(db, "INVENTORY", equipment.id);
+    await updateDoc(docRef, {
+      Shifted: true,
+      ShiftedDate: getDate(),
+      ShiftedFromDept: equipment.data.department,
+      ShiftedFromLab: equipment.data.Lab,
+      department: department,
+      Lab: labData
+    }).then(() => {
+      call_alert(`${equipment.data.EquipmentName} shifted to Department: ${department} - Lab: ${labData}`, "blue");
+      setShowShift(false)
+    })
   };
 
   useEffect(() => {
@@ -257,11 +257,11 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
       <div className={showShift ? "duration-300 opacity-100 drop-shadow-lg zindex2000 bg-white h-2/6 rounded-lg p-4 w-4/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" : "duration-300 drop-shadow-lg zindex2000 bg-white h-2/6 rounded-lg p-4 w-4/12 absolute top-0 opacity-0 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden"}>
         <div className="border-b relative pb-3">
           <p className="font-bold text-lg ">Shift To Another Lab</p>
-          <XIcon className="h-6 w-6 absolute top-0 right-0 cursor-pointer" onClick={() => {setShowShift(false)}}/>
+          <XIcon className="h-6 w-6 absolute top-0 right-0 cursor-pointer" onClick={() => { setShowShift(false) }} />
         </div>
 
         <div className="py-4">
-          <select value={department} onChange={(e) => {setDepartment(e.target.value)}} className="mb-3 w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
+          <select value={department} onChange={(e) => { setDepartment(e.target.value) }} className="mb-3 w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white">
             {allDeptArr &&
               allDeptArr.map((department) => {
                 return (
@@ -273,7 +273,7 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
                 );
               })}
           </select>
-          <select disabled={department === ""} className="mb-3 w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value={labData} onChange={(e) => {setLabData(e.target.value)}}>
+          <select disabled={department === ""} className="mb-3 w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value={labData} onChange={(e) => { setLabData(e.target.value) }}>
             {labs &&
               labs.map((lab) => {
                 return (
@@ -286,8 +286,8 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
               })}
           </select>
         </div>
-		<div className="flex justify-between items-center">
-          <button onClick={() => {setShowShift(false)}} className="bg-red-500 duration-200 w-20 py-2 hover:bg-red-700 rounded-lg text-white font-bold">Close</button>
+        <div className="flex justify-between items-center">
+          <button onClick={() => { setShowShift(false) }} className="bg-red-500 duration-200 w-20 py-2 hover:bg-red-700 rounded-lg text-white font-bold">Close</button>
           <button className="bg-green-600 duration-200 w-20 py-2 hover:bg-green-700 rounded-lg text-white font-bold" onClick={shiftAddition}>Shift</button>
         </div>
       </div>
@@ -347,7 +347,7 @@ const UpdateEquipment = ({ hide, searchHide, title }) => {
         name="shift"
         disabled={equipment === undefined}
         className=" disabled:text-white disabled:bg-green-300 absolute top-20 -translate-y-2 right-6 tracking-wide font-semibold bg-green-600 text-gray-100 w-40 py-3 rounded-lg hover:bg-green-700 transition-all duration-500 ease-in-out items-center justify-center focus:shadow-outline focus:outline-none"
-        onClick={() => {setShowShift(true)}}
+        onClick={() => { setShowShift(true) }}
         type="button"
       >
         <svg
