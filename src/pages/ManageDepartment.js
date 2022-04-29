@@ -2,7 +2,6 @@ import { PlusIcon, TrashIcon, XIcon } from '@heroicons/react/outline'
 import { arrayRemove, doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useUserContext } from '../context/UseMembersContext'
 import { db } from '../firebase_config'
 
 const ManageDepartment = () => {
@@ -90,7 +89,7 @@ const ManageDepartment = () => {
 			<h1 className='text-white text-4xl text-center mt-5'>{data.title}</h1>
 			{
 				data.title === "Department" ? departments.map((child) => {
-					return <div key={child} className={child.length === 0 ? "hidden" : 'w-6/12 m-auto text-white bg-gray-500 hover:shadow-lg duration-200 rounded-lg mt-3 p-3 flex justify-between px-12 items-center'}><p>{child}</p><TrashIcon onClick={() => { deleteDepartment(child) }} className="cursor-pointer stroke-1 h-5 w-5" /></div>
+					return <div key={child} className={child.length === 0 ? "hidden" : 'w-6/12 bg-opacity-40 m-auto text-white bg-gray-500 hover:shadow-lg duration-200 rounded-lg mt-3 p-3 flex justify-between px-12 items-center'}><p>{child}</p><TrashIcon onClick={() => { deleteDepartment(child) }} className="cursor-pointer stroke-1 h-5 w-5" /></div>
 				}) : null
 			}
 			{

@@ -1,11 +1,9 @@
 import { PlusIcon, TrashIcon, XIcon } from '@heroicons/react/outline'
 import { arrayRemove, doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { db } from '../firebase_config'
 
 const ManageLabs = () => {
-	const location = useLocation()
 	const [labs, setLabs] = useState([])
 	const [newLab, setNewLab] = useState([])
 	const [data, setData] = useState({ title: "", array: [] })
@@ -101,7 +99,7 @@ const ManageLabs = () => {
 			{
 				labs.map((child) => {
 					console.log(labs)
-					return <div key={child} className={child.length === 0 ? "hidden" : 'w-6/12 m-auto text-white bg-gray-500 hover:shadow-lg duration-200 rounded-lg mt-3 p-3 flex justify-between px-12 items-center'}><p>{child}</p><TrashIcon onClick={() => { deleteLab(child) }} className="cursor-pointer stroke-1 h-5 w-5" /></div>
+					return <div key={child} className={child.length === 0 ? "hidden" : 'w-6/12 bg-opacity-40 m-auto text-white bg-gray-500 hover:shadow-lg duration-200 rounded-lg mt-3 p-3 flex justify-between px-12 items-center'}><p>{child}</p><TrashIcon onClick={() => { deleteLab(child) }} className="cursor-pointer stroke-1 h-5 w-5" /></div>
 				})
 			}
 			{
