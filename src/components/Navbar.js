@@ -31,11 +31,9 @@ export default function Navbar() {
         setNavigation([
           { name: 'Home', to: '/', current: false },
           { name: 'Search', to: '/search', current: false },
-          { name: 'Members', to: '/members', current: true },
           { name: 'Add Equipment', to: '/add/equipment', current: false },
           { name: 'Update Equipment Record', to: '/update/equipment', current: false },
           { name: 'Scrap', to: '/scrap', current: false },
-          { name: 'Create User', to: '/create', current: true },
           { name: 'Admin Panel', to: '/admin', current: true },
         ])
       }

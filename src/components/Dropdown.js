@@ -20,10 +20,6 @@ const Dropdown = ({ selected, update, member }) => {
 						update("USER", member)
 						setDropdown(false)
 					}} className={!selected ? 'px-3 py-1 hover:bg-gray-600 duration-200 text-green-500 font-bold rounded cursor-pointer' : 'px-3 py-1 hover:bg-gray-600 duration-200 rounded cursor-pointer'}>USER</p>
-					<p onClick={() => {
-						update("delete", member)
-						setDropdown(false)
-					}} className='px-3 py-1 hover:bg-red-600 duration-200 rounded cursor-pointer'>Delete</p>
 				</div>
 			</div>
 		</>

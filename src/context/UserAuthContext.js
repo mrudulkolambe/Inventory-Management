@@ -23,7 +23,6 @@ export function UserAuthContextProvider({ children }) {
 				window.location.reload()
 			})
 	}
-
 	const createAccount = (email, password, name, admin, department) => {
 		createUserWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
@@ -45,6 +44,8 @@ export function UserAuthContextProvider({ children }) {
 								await updateDoc(doc(db, "ADMIN", "ADMIN"), {
 									ADMINS: arrayUnion(user.uid)
 								})
+									.then(() => {
+									})
 							}
 						})
 				}).catch((error) => {

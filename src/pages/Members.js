@@ -4,8 +4,10 @@ import { useUserContext } from '../context/UseMembersContext';
 import { PencilIcon, ChevronDownIcon } from "@heroicons/react/outline"
 import Dropdown from '../components/Dropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase_config';
+import { deleteUser } from 'firebase/auth';
+import { useUserAuth } from '../context/UserAuthContext';
 
 const Members = () => {
 	document.title = "SIGCE Inventory | All Members"
@@ -56,7 +58,7 @@ const Members = () => {
 			await updateDoc(docRef, {
 				admin: true
 			})
-				.then( async () => {
+				.then(async () => {
 					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
 						ADMINS: arrayUnion(uid)
 					})
@@ -70,7 +72,7 @@ const Members = () => {
 			await updateDoc(docRef, {
 				admin: false
 			})
-				.then( async () => {
+				.then(async () => {
 					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
 						ADMINS: arrayRemove(uid)
 					})
@@ -80,12 +82,14 @@ const Members = () => {
 				})
 		}
 		else if (type === "delete") {
-			const docRef = doc(db, "USERS", uid);
-			await updateDoc(docRef, {
-				admin: true
-			})
-				.then(() => {
-					setShowModal(false)
+			await deleteDoc(doc(db, "USERS", uid))
+				.then(async () => {
+					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
+						ADMINS: arrayRemove(uid)
+					})
+						.then(() => {
+							setShowModal(false)
+						})
 				})
 		}
 

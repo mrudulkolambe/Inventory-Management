@@ -17,6 +17,8 @@ import { useState } from 'react';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import ManageUser from './pages/ManageUser';
+import ManageDepartment from './pages/ManageDepartment';
+import ManageLabs from './pages/ManageLabs';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -56,6 +58,9 @@ function App() {
             <Route path="/scrap" exact element={<Scrap/>} />
             <Route path="/admin" exact element={<Admin/>} />
             <Route path="/manage/user/:uid" exact element={<ManageUser/>} />
+            <Route path="/manage/department/" exact element={<ManageDepartment/>} />
+            <Route path="/manage/lab/" exact element={<ManageLabs/>} />
+            {/* <Route path="/manage/equipment/" exact element={<Manage/>} /> */}
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>

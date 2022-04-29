@@ -14,7 +14,7 @@ const ConfirmationModal = ({ modalHandle, showModal, data, handleOkay }) => {
       <div
         className={
           showModal
-            ? "rounded-lg shadow-lg p-3 zindex2000 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            ? "rounded-lg shadow-lg p-3 zindex2000 bg-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             : "hidden"
         }
       >

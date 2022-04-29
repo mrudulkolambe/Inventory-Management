@@ -4,6 +4,7 @@ import { useUserContext } from '../context/UseMembersContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import Alert from "../components/Alert"
 
+
 const CreateUser = () => {
 	document.title = "SIGCE Inventory | Create User"
 	const [btnText, setbtnText] = useState("Create User");
@@ -42,6 +43,7 @@ const CreateUser = () => {
 	};
 	const [show1, setShow1] = useState(true)
 	const { createAccount } = useUserAuth()
+
 	return (
 		<>
 			<Alert message={message} messageSetter={setMessage} flag={flag} type={alertType} />
