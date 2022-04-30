@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
 import { json2csv } from 'json-2-csv'
 
-const Scrap = () => {
+const Shift= () => {
 	document.title = "SIGCE Inventory | Scrap"
 	const [searchBtnText, setSearchBtnText] = useState("Search");
 	const [results, setResults] = useState([]);
@@ -15,7 +15,7 @@ const Scrap = () => {
 	const searchBtn = useRef()
 
 	useEffect(() => {
-		const q = query(collection(db, "INVENTORY"), where("Scrap", "==", true));
+		const q = query(collection(db, "INVENTORY"), where("Shifted", "==", true));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			let arr = []
 			querySnapshot.forEach((doc) => {
@@ -105,7 +105,7 @@ const Scrap = () => {
 						className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300"
 					>
 						<li className='rounded overflow-hidden cursor-pointer'>
-							<CSVLink data={json} filename={`Scrap-Inventory.csv`}>
+							<CSVLink data={json} filename={`Shift-Inventory.csv`}>
 								<a
 									className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
 								>
@@ -143,7 +143,7 @@ const Scrap = () => {
 					</tr>
 					<div className='rounded-lg overflow-hidden'>
 						{
-							searchResults.length === 0 ? <div className='text-lg font-bold'>No Scrapped Item Found!</div> :
+							searchResults.length === 0 ? <div className='text-lg font-bold'>No Shifted Item Found!</div> :
 							searchResults && searchResults.map(({ data, id }, i) => {
 								return <tr key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
 									<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{data.TagNo}</Link></td>
@@ -163,4 +163,4 @@ const Scrap = () => {
 	)
 }
 
-export default Scrap
+export default Shift

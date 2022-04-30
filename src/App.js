@@ -20,6 +20,7 @@ import ManageUser from './pages/ManageUser';
 import ManageDepartment from './pages/ManageDepartment';
 import ManageLabs from './pages/ManageLabs';
 import ManageEquipment from './pages/ManageEquipment';
+import Shift from './pages/Shift';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -62,6 +63,7 @@ function App() {
             <Route path="/manage/department/" exact element={<ManageDepartment/>} />
             <Route path="/manage/lab/" exact element={<ManageLabs/>} />
             <Route path="/manage/equipment/" exact element={<ManageEquipment/>} />
+            <Route path="/shift/" exact element={<Shift/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>

@@ -34,6 +34,7 @@ export default function Navbar() {
           { name: 'Add Equipment', to: '/add/equipment', current: false },
           { name: 'Update Equipment Record', to: '/update/equipment', current: false },
           { name: 'Scrap', to: '/scrap', current: false },
+          { name: 'Shift', to: '/shift', current: true },
           { name: 'Admin Panel', to: '/admin', current: true },
         ])
       }
@@ -43,8 +44,8 @@ export default function Navbar() {
         { name: 'Home', to: '/', current: false },
         { name: 'Search', to: '/search', current: false },
         { name: 'Add Equipment', to: '/add/equipment', current: false },
+        { name: 'Shift', to: '/shift', current: false },
         { name: 'Update Equipment Record', to: '/update/equipment', current: false },
-        { name: 'Scrap', to: '/scrap', current: false },
       ])
     }
   }, [user, admin, location]);
