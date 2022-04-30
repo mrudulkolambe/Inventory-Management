@@ -3,7 +3,7 @@
   "name": "SIGCE Inventory Management System",
   "icons": [
     {
-      "src": "./sigce.png",
+      "src": "sigce.png",
       "sizes": "1024x1024",
       "type": "image/png"
     }
