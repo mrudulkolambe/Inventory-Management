@@ -4,7 +4,8 @@ import HomeCard from '../components/HomeCard'
 import { useUserContext } from '../context/UseMembersContext'
 import { useUserAuth } from '../context/UserAuthContext'
 
-const Admin = () => {
+const Admin = ({nav}) => {
+  nav(true)
   document.title = "SIGCE Inventory | Admin"
   const navigate = useNavigate()
   const { user } = useUserAuth()

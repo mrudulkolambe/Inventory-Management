@@ -3,7 +3,8 @@ import { arrayRemove, doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/fi
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase_config'
 
-const ManageLabs = () => {
+const ManageLabs  = ({nav}) => {
+	nav(true)
 	const [labs, setLabs] = useState([])
 	const [newLab, setNewLab] = useState([])
 	const [data, setData] = useState({ title: "", array: [] })

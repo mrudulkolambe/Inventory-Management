@@ -1,23 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { useUserContext } from '../context/UseMembersContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import Alert from "../components/Alert"
+import emailjs from "@emailjs/browser"
 
 
-const CreateUser = () => {
+const CreateUser = ({nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Create User"
+	const form = useRef()
 	const [btnText, setbtnText] = useState("Create User");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [department, setDepartment] = useState("");
 	const [password, setPassword] = useState("");
-	const [confpassword, setConfPassword] = useState("");
+	// const [confpassword, setConfPassword] = useState("");
 	const { departmentArray } = useUserContext()
 	const [admin, setAdmin] = useState(false);
 	const [flag, setFlag] = useState(false);
 	const [message, setMessage] = useState("");
 	const [alertType, setAlertType] = useState("blue");
+	const [template, setTemplate] = useState({
+		name: name,
+		email: btoa(email),
+		sender: email
+	});
 	const handleClick = () => {
 		if (admin !== null) {
 			console.log(department)
@@ -28,6 +36,7 @@ const CreateUser = () => {
 			setEmail("")
 			setPassword("")
 			setAdmin("")
+			sendEmail()
 		} else {
 			call_alert("Set The User Type", "red")
 		}
@@ -43,6 +52,22 @@ const CreateUser = () => {
 	};
 	const [show1, setShow1] = useState(true)
 	const { createAccount } = useUserAuth()
+	useEffect(() => {
+		setTemplate({
+			name: name,
+			email: btoa(email),
+			sender: email,
+			password: btoa(password),
+		})
+	}, [name, email, password]);
+	const sendEmail = () => {
+		emailjs.send(process.env.REACT_APP_EMAIL_SERVICE_ID, process.env.REACT_APP_EMAIL_TEMPLATE_ID, template, process.env.REACT_APP_EMAIL_PUBLIC_KEY)
+			.then((result) => {
+				console.log(result.text);
+			}, (error) => {
+				console.log(error.text);
+			});
+	}
 
 	return (
 		<>
@@ -54,7 +79,7 @@ const CreateUser = () => {
 						style={{ backgroundImage: 'url("https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg")' }}
 					></div>
 				</div>
-				<form className="lg:w-1/2 xl:w-6/12 p-6 sm:p-12" autoComplete="off">
+				<form ref={form} className="lg:w-1/2 xl:w-6/12 p-6 sm:p-12" autoComplete="off">
 					<div className="flex flex-col items-center">
 						<h1 className="text-4xl font-extrabold">
 							Create User
@@ -64,6 +89,7 @@ const CreateUser = () => {
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
 								type="text"
 								value={name}
+								name={"name"}
 								onChange={(e) => { setName(e.target.value) }}
 								placeholder="Name"
 							/>
@@ -71,6 +97,7 @@ const CreateUser = () => {
 								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
 								type="email"
 								value={email}
+								name={"sender-email"}
 								onChange={(e) => { setEmail(e.target.value) }}
 								placeholder="Email"
 							/>

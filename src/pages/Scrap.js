@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
 import { json2csv } from 'json-2-csv'
 
-const Scrap = () => {
+const Scrap  = ({nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Scrap"
 	const [searchBtnText, setSearchBtnText] = useState("Search");
 	const [results, setResults] = useState([]);

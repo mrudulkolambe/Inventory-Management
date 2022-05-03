@@ -20,7 +20,8 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { useUserContext } from "../context/UseMembersContext";
 import { XIcon } from "@heroicons/react/outline";
 
-const UpdateEquipment = ({ hide, searchHide, title }) => {
+const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
+  nav(true)
   document.title = title;
   const { user } = useUserAuth();
   const { equipmentID } = useParams();

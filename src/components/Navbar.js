@@ -7,7 +7,7 @@ import { useUserContext } from '../context/UseMembersContext'
 
 
 
-export default function Navbar() {
+export default function Navbar({ nav }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -24,8 +24,8 @@ export default function Navbar() {
     { name: 'Scrap', to: '/scrap', current: false },
   ]
   const [navigation, setNavigation] = useState(InitialState);
-
   useEffect(() => {
+   
     if (user && admin) {
       if (admin.includes(user.uid)) {
         setNavigation([
@@ -48,7 +48,11 @@ export default function Navbar() {
         { name: 'Update Equipment Record', to: '/update/equipment', current: false },
       ])
     }
-  }, [user, admin, location]);
+    if (!nav) {
+      console.log(nav)
+      setNavigation([])
+    }
+  }, [user, admin, location, nav]);
 
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">

@@ -5,7 +5,8 @@ import { db } from '../firebase_config';
 import Alert from '../components/Alert';
 import { useUserAuth } from '../context/UserAuthContext';
 
-const AddEquipment = () => {
+const AddEquipment = ({nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Add Equipment"
 	const { departmentArray, equipmentCheck, items, getDate, allDepts, equipmentItem } = useUserContext()
 	const btn = useRef()

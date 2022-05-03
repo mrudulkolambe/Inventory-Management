@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-const SignUp = () => {
+const SignUp  = ({nav}) => {
+  nav(true)
   const [btnText, setbtnText] = useState("Create User");
   const [btnLoading, setbtnLoading] = useState(true);
   return (

@@ -6,7 +6,8 @@ import { useUserContext } from '../context/UseMembersContext'
 import { useUserAuth } from '../context/UserAuthContext'
 import { db } from '../firebase_config'
 
-const ManageUser = () => {
+const ManageUser = ({nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Manage User"
 	const [show, setShow] = useState(true)
 	const [userData, setUserData] = useState({})

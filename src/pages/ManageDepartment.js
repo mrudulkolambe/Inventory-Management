@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { db } from '../firebase_config'
 
-const ManageDepartment = () => {
+const ManageDepartment  = ({nav}) => {
+	nav(true)
 	const location = useLocation()
 	const [departments, setDepartments] = useState([])
 	const [data, setData] = useState({ title: "", array: [] })

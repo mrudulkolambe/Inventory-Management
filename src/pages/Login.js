@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
 
-const Login = ({user}) => {
+const Login = ({user, nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Login"
 	const [btnText, setbtnText] = useState("Login User");
 	const { login } = useUserAuth()
@@ -42,6 +44,7 @@ const Login = ({user}) => {
 								value={email}
 								onChange={(e) => { setEmail(e.target.value) }}
 								placeholder="Email"
+								autoComplete='off'
 							/>
 							<div className='relative'>
 								<input
@@ -50,11 +53,15 @@ const Login = ({user}) => {
 									value={password}
 									onChange={(e) => { setPassword(e.target.value) }}
 									placeholder="Password"
+									autoComplete='off'
 								/>
 								<div onClick={() => { show ? setShow(false) : setShow(true) }}>
 									{show ? <EyeIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' /> :
 										<EyeOffIcon className='top-9 right-4 absolute h-5 w-5 cursor-pointer' />}
 								</div>
+							</div>
+							<div className='relative text-right font-bold text-blue-500 my-3 text-sm'>
+								<Link to={"/change-password"}>forget password?</Link>
 							</div>
 							<button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={handleClick} type="button">
 								<svg

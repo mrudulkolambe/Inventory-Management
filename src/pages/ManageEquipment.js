@@ -9,7 +9,8 @@ import {
 import { db } from "../firebase_config";
 import { PlusIcon, TrashIcon, XIcon } from "@heroicons/react/outline";
 
-const ManageEquipment = () => {
+const ManageEquipment  = ({nav}) => {
+  nav(true)
   const [equipments, setEquipments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [input, setInput] = useState("");

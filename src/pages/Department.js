@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
 import { json2csv } from 'json-2-csv'
 
-const Department = ({ lab }) => {
+const Department = ({ lab, nav }) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Search By Department"
 	const { departmentArray, allDepts } = useUserContext()
 	const [search, setSearch] = useState("");

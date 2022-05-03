@@ -1,7 +1,8 @@
 import React from 'react'
 import HomeCard from '../components/HomeCard'
 
-const Home = () => {
+const Home = ({ nav }) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Home"
 	const cardArr = [
 		{

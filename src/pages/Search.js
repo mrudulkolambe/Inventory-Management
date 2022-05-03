@@ -1,7 +1,8 @@
 import React from 'react'
 import HomeCard from '../components/HomeCard'
 
-const Search = () => {
+const Search  = ({nav}) => {
+	nav(true)
 	document.title = "SIGCE Inventory | Search"
 	const cardArr = [
 		{

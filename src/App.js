@@ -21,6 +21,8 @@ import ManageDepartment from './pages/ManageDepartment';
 import ManageLabs from './pages/ManageLabs';
 import ManageEquipment from './pages/ManageEquipment';
 import Shift from './pages/Shift';
+import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -40,30 +42,33 @@ function App() {
     })
     setHideNavbar(false)
   })
+  const [nav, setNav] = useState(true);
   return (
     <UserAuthContextProvider>
       <UserMemberContextProvider>
         <div className="App">
-         { hideNavbar ? null :  <Navbar /> }
+         { hideNavbar ? null :  <Navbar nav={nav}/> }
           <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/login" exact element={<Login user={"User"}/>} />
-            <Route path="/create" exact element={<CreateUser />} />
-            <Route path="/members" exact element={<Members />} />
-            <Route path="/add/equipment" exact element={<AddEquipment />} />
-            <Route path="/update/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Update Equipment"}/>} />
-            <Route path="/search" exact element={<Search/>} />
-            <Route path="/search/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Search Equipment"} />} />
-            <Route path="/search/department" exact element={<Department lab={false}/>} />
-            <Route path="/search/lab" exact element={<Department lab={true}/>} />
-            <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true}/>} />
-            <Route path="/scrap" exact element={<Scrap/>} />
-            <Route path="/admin" exact element={<Admin/>} />
-            <Route path="/manage/user/:uid" exact element={<ManageUser/>} />
-            <Route path="/manage/department/" exact element={<ManageDepartment/>} />
-            <Route path="/manage/lab/" exact element={<ManageLabs/>} />
-            <Route path="/manage/equipment/" exact element={<ManageEquipment/>} />
-            <Route path="/shift/" exact element={<Shift/>} />
+            <Route path="/" exact element={<Home  nav={setNav}/>} />
+            <Route path="/login" exact element={<Login user={"User"} nav={setNav}/>} />
+            <Route path="/create" exact element={<CreateUser  nav={setNav}/>} />
+            <Route path="/members" exact element={<Members  nav={setNav}/>} />
+            <Route path="/add/equipment" exact element={<AddEquipment  nav={setNav}/>} />
+            <Route path="/update/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Update Equipment"} nav={setNav}/>} />
+            <Route path="/search" exact element={<Search nav={setNav}/>} />
+            <Route path="/search/equipment" exact element={<UpdateEquipment title={"SIGCE Inventory | Search Equipment"}  nav={setNav}/>} />
+            <Route path="/search/department" exact element={<Department lab={false} nav={setNav}/>} />
+            <Route path="/search/lab" exact element={<Department lab={true} nav={setNav}/>} />
+            <Route path="/equipment/:equipmentID" exact element={<UpdateEquipment title={"SIGCE Inventory | Equipment"} searchHide={true} nav={setNav}/>} />
+            <Route path="/scrap" exact element={<Scrap nav={setNav}/>} />
+            <Route path="/admin" exact element={<Admin nav={setNav}/>} />
+            <Route path="/manage/user/:uid" exact element={<ManageUser nav={setNav}/>} />
+            <Route path="/manage/department/" exact element={<ManageDepartment nav={setNav}/>} />
+            <Route path="/manage/lab/" exact element={<ManageLabs nav={setNav}/>} />
+            <Route path="/manage/equipment/" exact element={<ManageEquipment nav={setNav}/>} />
+            <Route path="/shift/" exact element={<Shift nav={setNav}/>} />
+            <Route path="/change-password" exact element={<ForgetPassword setHideNavbar={setNav}/>} />
+            <Route path="/reset-password" exact element={<ResetPassword setHideNavbar={setNav}/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>
