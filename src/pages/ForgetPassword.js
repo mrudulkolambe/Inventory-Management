@@ -19,7 +19,6 @@ const ForgetPassword = ({setHideNavbar}) => {
 			// setReadOnly(true)
 		}
 		else {
-			setReadOnly(false)
 			return
 		}
 	}, [location]);
