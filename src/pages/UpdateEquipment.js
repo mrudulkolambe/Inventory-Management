@@ -223,7 +223,6 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
     }
   };
   const shiftAddition = async () => {
-    console.log(allDeptArr);
     const docRef = doc(db, "INVENTORY", equipment.id);
     await updateDoc(docRef, {
       Shifted: true,

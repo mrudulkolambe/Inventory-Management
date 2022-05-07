@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import Alert from '../components/Alert';
 
-const Login = ({user, nav}) => {
+const Login = ({ user, nav }) => {
 	nav(true)
 	document.title = "SIGCE Inventory | Login"
 	const [btnText, setbtnText] = useState("Login User");
@@ -12,19 +13,32 @@ const Login = ({user, nav}) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(true)
+	const [error, setError] = useState(false)
+	const [message, setMessage] = useState("")
+	const [alertType, setAlertType] = useState("blue")
 	const handleClick = () => {
 		setbtnText("Logging In...")
-		login(email, password)
+		login(email, password, call_alert)
 		setEmail("")
 		setPassword("")
 		setTimeout(() => {
 			setbtnText("Login User")
 		}, 2000);
 	}
+	const call_alert = (content, type) => {
+		setError(true);
+		setMessage(content);
+		setAlertType(type)
+		const timeout = setTimeout(() => {
+			setError(false);
+			clearTimeout(timeout);
+		}, 10);
+	};
 
 	return (
 		<>
-			<div className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+			<Alert message={message} messageSetter={setMessage} flag={error} type={alertType} />
+			<div id="login" className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
 				<div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-l-lg">
 					<div
 						className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
@@ -78,10 +92,8 @@ const Login = ({user, nav}) => {
 								</svg>
 								<span className="ml-3">{btnText}</span>
 							</button>
-							<div className="my-12 border-b text-center hidden">
-								<div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-									Or sign up with e-mail
-								</div>
+							<div className='relative font-bold text-blue-500 mt-3 text-sm flex items-center justify-center'>
+								<p className='mr-2 text-black'>Don't have an account?</p><Link to={"/create"} >SignUp</Link>
 							</div>
 						</div>
 					</div>

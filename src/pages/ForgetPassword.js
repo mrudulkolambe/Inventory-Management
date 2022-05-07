@@ -8,24 +8,11 @@ const ForgetPassword = ({setHideNavbar}) => {
 	const [message, setMessage] = useState("");
 	const [flag, setFlag] = useState(false);
 	const [alertType, setAlertType] = useState("blue");
-	// const [readOnly, setReadOnly] = useState(false)
 	const [email, setEmail] = useState();
-	const location = useLocation()
-	useEffect(() => {
-		const query = new URLSearchParams(location.search)
-		const email2 = atob(query.get("id"))
-		if (email2.length !== 0) {
-			setEmail(email2)
-			// setReadOnly(true)
-		}
-		else {
-			return
-		}
-	}, [location]);
 	const sendPasswordResetEmailFunc = () => {
 		const auth = getAuth();
 		sendPasswordResetEmail(auth, email)
-			.then(() => {
+			.then((res) => {
 				call_alert("Password Reset Email Send! Please Check Your Email", "blue")
 			})
 			.catch((error) => {
@@ -52,7 +39,7 @@ const ForgetPassword = ({setHideNavbar}) => {
 						<label className="block text-white text-sm font-bold mb-2" htmlFor="Email">
 							Email
 						</label>
-						<input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-500 border border-gray-200 placeholder-gray-200 duration-200 text-white text-sm focus:outline-none focus:border-gray-400 focus:bg-gray-400 focus:bg-opacity-40" id="Email" type="email" placeholder="Email" autoComplete='off' value={email} onChange={(e) => { setEmail(e.target.value) }} />
+						<input className="w-full px-8 py-4 rounded-lg font-medium bg-gray-500 border border-gray-200 placeholder-gray-200 duration-200 text-white text-sm focus:outline-none focus:border-gray-400 focus:bg-gray-400 focus:bg-opacity-40" id="Email" type="email" placeholder="Email" autoComplete='off' vaslue={email} onChange={(e) => { setEmail(e.target.value) }} />
 					</div>
 					<div className="flex items-center justify-between">
 						<button className="bg-blue-500 hover:bg-blue-700 m-auto duration-200 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={sendPasswordResetEmailFunc}>

@@ -23,7 +23,10 @@ export function UserAuthContextProvider({ children }) {
 				window.location.reload()
 			})
 	}
-	const createAccount = (email, password, name, admin, department) => {
+	const sendEmail = () => {
+
+	}
+	const createAccount = (email, password, name, admin, department, call_alert) => {
 		createUserWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
 				const user = userCredential.user;
@@ -34,27 +37,20 @@ export function UserAuthContextProvider({ children }) {
 					await setDoc(doc(db, "USERS", user.uid), {
 						name: user.displayName,
 						email: user.email,
-						admin: admin,
+						admin: false,
 						password: btoa(password),
 						department: department,
 						uid: user.uid,
+						isVerified: false,
+						authorizedBy: null
 					})
-						.then(async () => {
-							if (admin) {
-								await updateDoc(doc(db, "ADMIN", "ADMIN"), {
-									ADMINS: arrayUnion(user.uid)
-								})
-									.then(() => {
-									})
-							}
-						})
 				}).catch((error) => {
 					console.log(error)
 				});
 
 			})
 			.catch((error) => {
-				console.log(error)
+				call_alert("Invalid Credentials!!", "red")
 				deleteUser(user).then(() => {
 					console.log("User Deleted")
 				}).catch((error) => {
@@ -63,7 +59,7 @@ export function UserAuthContextProvider({ children }) {
 			});
 	}
 
-	const login = (email, password) => {
+	const login = (email, password, call_alert) => {
 		signInWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
 				const user = userCredential.user;
@@ -72,7 +68,7 @@ export function UserAuthContextProvider({ children }) {
 				navigate("/")
 			})
 			.catch((error) => {
-				console.log(error)
+				call_alert("Invalid Credentials!!", "red")
 				return error
 			});
 	}
@@ -84,7 +80,7 @@ export function UserAuthContextProvider({ children }) {
 				navigate(`/login`);
 			}
 			else {
-				// navigate('/')
+				navigate('/')
 			}
 		});
 

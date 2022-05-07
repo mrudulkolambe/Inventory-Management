@@ -1,19 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/UseMembersContext';
-import { PencilIcon, ChevronDownIcon } from "@heroicons/react/outline"
 import Dropdown from '../components/Dropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
-import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase_config';
-import { deleteUser } from 'firebase/auth';
-import { useUserAuth } from '../context/UserAuthContext';
+import { changePermission } from '../utilityFunctions';
 
-const Members  = ({nav}) => {
+const Members = ({ nav }) => {
 	nav(true)
 	document.title = "SIGCE Inventory | All Members"
 	const navigate = useNavigate()
 	const { members } = useUserContext()
+	const { departmentArray } = useUserContext()
 	const handleCopy = (context, target, e, text) => {
 		navigator.clipboard.writeText(context);
 		e.target.innerHTML = "Copied!";
@@ -54,45 +51,10 @@ const Members  = ({nav}) => {
 	}
 
 	const handleDropdownChange = async (uid, type) => {
-		if (type === "ADMIN") {
-			const docRef = doc(db, "USERS", uid);
-			await updateDoc(docRef, {
-				admin: true
-			})
-				.then(async () => {
-					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
-						ADMINS: arrayUnion(uid)
-					})
-						.then(() => {
-							setShowModal(false)
-						})
-				})
-		}
-		else if (type === "USER") {
-			const docRef = doc(db, "USERS", uid);
-			await updateDoc(docRef, {
-				admin: false
-			})
-				.then(async () => {
-					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
-						ADMINS: arrayRemove(uid)
-					})
-						.then(() => {
-							setShowModal(false)
-						})
-				})
-		}
-		else if (type === "delete") {
-			await deleteDoc(doc(db, "USERS", uid))
-				.then(async () => {
-					await updateDoc(doc(db, "ADMIN", "ADMIN"), {
-						ADMINS: arrayRemove(uid)
-					})
-						.then(() => {
-							setShowModal(false)
-						})
-				})
-		}
+		changePermission(uid, type)
+	}
+	const handleDepartment = () => {
+
 	}
 	return (
 		<>
@@ -103,7 +65,6 @@ const Members  = ({nav}) => {
 						<tr className='grid grid-cols-4 font-bold w-full justify-between p-3 text-lg'>
 							<th className='m-auto'>Name</th>
 							<th className='m-auto'>Email</th>
-							{/* <th className='m-auto'>Link</th> */}
 							<th className='m-auto'>Department</th>
 							<th className='m-auto'>Manage User</th>
 						</tr>
@@ -115,7 +76,6 @@ const Members  = ({nav}) => {
 									<tr key={member.uid} onDoubleClick={() => { navigate(`/user/${member.uid}`) }} className={i === members.length - 1 ? "grid grid-cols-4 w-full justify-between p-3" : 'relative grid grid-cols-4 w-full justify-between p-3 border-b-2'}>
 										<td className='m-auto cursor-pointer members_title' data-title="Click To Copy" onClick={(e) => { handleCopy(e.target.innerHTML, "Name", e, member.name) }}>{member.name}</td>
 										<td className='m-auto cursor-pointer members_title' data-title="Click To Copy" onClick={(e) => { handleCopy(e.target.innerHTML, "Email", e, member.email) }}>{member.email}</td>
-										{/* <td className='m-auto cursor-pointer members_title overflow-hidden text-ellipsis whitespace-nowrap w-1/5' data-title="Click To Copy" onClick={(e) => { handleCopy(e.target.innerHTML, "Password", e, atob(member.password)) }}>{`http://localhost:3000/user/?id=${btoa(member.email)}?${member.password}`}</td> */}
 										<td className='m-auto flex items-center'>{member.department}</td>
 										<Dropdown update={handleUpdate} member={member} selected={member.admin} />
 									</tr>

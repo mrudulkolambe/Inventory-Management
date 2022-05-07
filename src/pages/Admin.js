@@ -22,10 +22,10 @@ const Admin = ({nav}) => {
   }, [user, admin]);
   const cardArray = [
     {
-      main: "User",
-      desc: "Create User",
+      main: "Authorize",
+      desc: "Authorize User",
       icon: "user",
-      link: "/create"
+      link: "/authorize-user"
     },
     {
       main: "Members",

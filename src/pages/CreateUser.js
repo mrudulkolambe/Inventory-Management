@@ -4,19 +4,21 @@ import { useUserContext } from '../context/UseMembersContext';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import Alert from "../components/Alert"
 import emailjs from "@emailjs/browser"
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase_config';
 
 
-const CreateUser = ({nav}) => {
+const CreateUser = ({ nav }) => {
 	nav(true)
-	document.title = "SIGCE Inventory | Create User"
+	document.title = "SIGCE Inventory | SignUp User"
 	const form = useRef()
-	const [btnText, setbtnText] = useState("Create User");
+	const [btnText, setbtnText] = useState("Sign Up");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [department, setDepartment] = useState("");
 	const [password, setPassword] = useState("");
-	// const [confpassword, setConfPassword] = useState("");
-	const { departmentArray } = useUserContext()
+	const [departmentArray, setdepartmentArray] = useState([])
+
 	const [admin, setAdmin] = useState(false);
 	const [flag, setFlag] = useState(false);
 	const [message, setMessage] = useState("");
@@ -26,17 +28,27 @@ const CreateUser = ({nav}) => {
 		email: btoa(email),
 		sender: email
 	});
+	useEffect(() => {
+		const unsub1 = onSnapshot(doc(db, "DEPARTMENTS", "DEPARTMENTS"), (doc) => {
+			let newArr = []
+			doc.data().DEPARTMENTS.map((department) => {
+				newArr.push(department)
+			})
+			setdepartmentArray(newArr)
+		});
+		return () => {
+			unsub1()
+		};
+	}, []);
 	const handleClick = () => {
 		if (admin !== null) {
-			console.log(department)
 			setbtnText("Loading...")
-			createAccount(email, password, name, admin, department)
-			setbtnText("User Created")
+			createAccount(email, password, name, admin, department, call_alert)
 			setName("")
 			setEmail("")
 			setPassword("")
 			setAdmin("")
-			sendEmail()
+			setbtnText("Sign Up")
 		} else {
 			call_alert("Set The User Type", "red")
 		}
@@ -52,22 +64,23 @@ const CreateUser = ({nav}) => {
 	};
 	const [show1, setShow1] = useState(true)
 	const { createAccount } = useUserAuth()
-	useEffect(() => {
-		setTemplate({
-			name: name,
-			email: btoa(email),
-			sender: email,
-			password: btoa(password),
-		})
-	}, [name, email, password]);
-	const sendEmail = () => {
-		emailjs.send(process.env.REACT_APP_EMAIL_SERVICE_ID, process.env.REACT_APP_EMAIL_TEMPLATE_ID, template, process.env.REACT_APP_EMAIL_PUBLIC_KEY)
-			.then((result) => {
-				console.log(result.text);
-			}, (error) => {
-				console.log(error.text);
-			});
-	}
+	// useEffect(() => {
+	// 	setTemplate({
+	// 		name: name,
+	// 		email: btoa(email),
+	// 		sender: email,
+	// 		password: btoa(password),
+	// 	})
+	// }, [name, email, password]);
+
+	// const sendEmail = () => {
+	// 	emailjs.send(process.env.REACT_APP_EMAIL_SERVICE_ID, process.env.REACT_APP_EMAIL_TEMPLATE_ID, template, process.env.REACT_APP_EMAIL_PUBLIC_KEY)
+	// 		.then((result) => {
+	// 			console.log(result.text);
+	// 		}, (error) => {
+	// 			console.log(error.text);
+	// 		});
+	// }
 
 	return (
 		<>
@@ -111,15 +124,6 @@ const CreateUser = ({nav}) => {
 										return <option value={department} key={department}>{department.length === 0 ? "---choose option---" : department}</option>
 									})
 								}
-							</select>
-							<select
-								className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-								value={admin === null ? "" : admin ? "ADMIN" : "USER"}
-								onChange={(e) => { setAdmin(e.target.value === "" ? null : e.target.value === "ADMIN" ? true : false) }}
-							>
-								<option value={""} key={""}>{"---Choose User Type---"}</option>
-								<option value={"ADMIN"} key={"ADMIN"}>{"ADMIN"}</option>
-								<option value={"USER"} key={"USER"}>{"USER"}</option>
 							</select>
 							<div className='relative'>
 								<input

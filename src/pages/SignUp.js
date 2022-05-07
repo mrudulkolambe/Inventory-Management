@@ -6,6 +6,7 @@ const SignUp  = ({nav}) => {
   const [btnLoading, setbtnLoading] = useState(true);
   return (
     <>
+    			<Alert message={message} messageSetter={setMessage} flag={flag} type={alertType} />
       <div className="m-auto sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
 	  <div className="flex-1 bg-indigo-100 text-center hidden lg:flex rounded-l-lg">
           <div

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useUserAuth } from '../context/UserAuthContext'
 import { useUserContext } from '../context/UseMembersContext'
 
@@ -11,9 +11,8 @@ export default function Navbar({ nav }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
-  const navigate = useNavigate()
   const { logOut, user } = useUserAuth()
-  const { admin } = useUserContext()
+  const { admin, isVerified } = useUserContext()
   const location = useLocation()
 
   const InitialState = [
@@ -25,7 +24,17 @@ export default function Navbar({ nav }) {
   ]
   const [navigation, setNavigation] = useState(InitialState);
   useEffect(() => {
-   
+    if (user) {
+      if (isVerified) {
+        setNavigation([
+          { name: 'Home', to: '/', current: false },
+          { name: 'Search', to: '/search', current: false },
+          { name: 'Add Equipment', to: '/add/equipment', current: false },
+          { name: 'Shift', to: '/shift', current: false },
+          { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+        ])
+      }
+    }
     if (user && admin) {
       if (admin.includes(user.uid)) {
         setNavigation([
@@ -37,23 +46,21 @@ export default function Navbar({ nav }) {
           { name: 'Shift', to: '/shift', current: true },
           { name: 'Admin Panel', to: '/admin', current: true },
         ])
+      } else {
+        setNavigation([
+          { name: 'Home', to: '/', current: false },
+          { name: 'Search', to: '/search', current: false },
+          { name: 'Add Equipment', to: '/add/equipment', current: false },
+          { name: 'Shift', to: '/shift', current: false },
+          { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+        ])
       }
     }
-    else {
-      setNavigation([
-        { name: 'Home', to: '/', current: false },
-        { name: 'Search', to: '/search', current: false },
-        { name: 'Add Equipment', to: '/add/equipment', current: false },
-        { name: 'Shift', to: '/shift', current: false },
-        { name: 'Update Equipment Record', to: '/update/equipment', current: false },
-      ])
-    }
-    if (!nav) {
-      console.log(nav)
+
+    if (!isVerified) {
       setNavigation([])
     }
-  }, [user, admin, location, nav]);
-
+  }, [admin, user, nav, isVerified]);
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
       {({ open }) => (

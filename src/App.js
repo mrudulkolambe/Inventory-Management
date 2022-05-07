@@ -23,6 +23,8 @@ import ManageEquipment from './pages/ManageEquipment';
 import Shift from './pages/Shift';
 import ForgetPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
+import WaitingForConfirmation from './pages/WaitingForConfirmation';
+import Users from './pages/Users';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -69,6 +71,8 @@ function App() {
             <Route path="/shift/" exact element={<Shift nav={setNav}/>} />
             <Route path="/change-password" exact element={<ForgetPassword setHideNavbar={setNav}/>} />
             <Route path="/reset-password" exact element={<ResetPassword setHideNavbar={setNav}/>} />
+            <Route path="/wait-for-confirmation" exact element={<WaitingForConfirmation nav={setNav}/>} />
+            <Route path="/authorize-user" exact element={<Users nav={setNav}/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>

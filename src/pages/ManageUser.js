@@ -18,7 +18,6 @@ const ManageUser = ({nav}) => {
 		if (user) {
 			const unsub = onSnapshot(doc(db, "USERS", uid), (doc) => {
 				setUserData(doc.data());
-				console.log(userData)
 			});
 			return () => {
 				unsub()
