@@ -6,19 +6,19 @@ const Search  = ({nav}) => {
 	document.title = "SIGCE Inventory | Search"
 	const cardArr = [
 		{
-			main: "Search",
+			main: "Department",
 			desc: "Search By Department",
 			icon: "department",
 			link: "/search/department"
 		},
 		{
-			main: "Search",
+			main: "Tag No.",
 			desc: "Search By Tag Number",
 			icon: "hashTag",
 			link: "/search/equipment"
 		},
 		{
-			main: "Search",
+			main: "Lab",
 			desc: "Search By Lab Name",
 			icon: "lab",
 			link: "/search/lab"
