@@ -2,6 +2,7 @@ import { addDoc, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 
 import moment from 'moment';
 import React, { useState } from 'react'
 import { read, utils } from 'xlsx';
+import Alert from '../components/Alert';
 import { useUserContext } from '../context/UseMembersContext';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase_config';
@@ -12,6 +13,9 @@ const ImportXLXS = ({ nav }) => {
 	const { items } = useUserContext()
 	const [setFile, SetsetFile] = useState();
 	const [loading, setLoading] = useState(false);
+	const [alertType, setAlertType] = useState("blue");
+	const [message, setMessage] = useState("");
+	const [flag, setFlag] = useState(false);
 	function ExcelDateToJSDate(serial) {
 		var utc_days = Math.floor(serial - 25569);
 		var utc_value = utc_days * 86400;
@@ -21,13 +25,13 @@ const ImportXLXS = ({ nav }) => {
 		return newDate
 	}
 
-	const addData = async () => {
-		setLoading(true)
+	const addData = () => {
 		table.forEach(async (row, i) => {
 			if (items.includes(row.TagNo)) {
 				return
 			}
 			else {
+				setLoading(true)
 				let newData = row;
 				newData.user = user.displayName
 				newData.TagNo = row.TagNo.toUpperCase()
@@ -41,6 +45,7 @@ const ImportXLXS = ({ nav }) => {
 						})
 							.then(() => {
 								console.log("added2", i)
+								setLoading(false)
 							})
 							.catch((err) => {
 								console.log(err, 1)
@@ -51,13 +56,22 @@ const ImportXLXS = ({ nav }) => {
 					})
 			}
 		})
-		setLoading(false)
+		call_alert("Data Added Successfully", "blue")
 	}
 
+	const call_alert = (content, type) => {
+		setFlag(true);
+		setMessage(content);
+		setAlertType(type)
+		const timeout = setTimeout(() => {
+			setFlag(false);
+			clearTimeout(timeout);
+		}, 10);
+	};
 	const [table, setTable] = useState([]);
 	return (
-
 		<>
+			<Alert message={message} messageSetter={setMessage} flag={flag} type={alertType} />
 			<div className='flex flex-col items-center'>
 				<div className="flex justify-center items-center w-6/12 m-auto mt-6">
 					<label htmlFor="dropzone-file" className="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
