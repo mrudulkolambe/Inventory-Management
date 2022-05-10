@@ -46,6 +46,7 @@ export default function Navbar({ nav }) {
           { name: 'Scrap', to: '/scrap', current: false },
           { name: 'Shift', to: '/shift', current: true },
           { name: 'Admin Panel', to: '/admin', current: true },
+          { name: 'Import XLXS', to: '/xlxs', current: true },
         ])
       } else {
         setNavigation([
@@ -54,6 +55,7 @@ export default function Navbar({ nav }) {
           { name: 'Add Equipment', to: '/add/equipment', current: false },
           { name: 'Shift', to: '/shift', current: false },
           { name: 'Update Equipment Record', to: '/update/equipment', current: false },
+          { name: 'Import XLXS', to: '/xlxs', current: true },
         ])
       }
     }

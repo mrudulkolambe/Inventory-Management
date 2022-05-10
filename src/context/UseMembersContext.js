@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { db } from "../firebase_config"
-import { collection, query, onSnapshot, doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { collection, query, onSnapshot, doc, updateDoc, arrayUnion, orderBy } from "firebase/firestore";
 import { useUserAuth } from "./UserAuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -84,7 +84,7 @@ export function UserMemberContextProvider({ children }) {
 	}, [user]);
 	useEffect(() => {
 		if (admin) {
-			const q = query(collection(db, "USERS"));
+			const q = query(collection(db, "USERS"), orderBy("department"));
 			const unsubscribe = onSnapshot(q, (querySnapshot) => {
 				let arr = [];
 				querySnapshot.forEach((doc) => {

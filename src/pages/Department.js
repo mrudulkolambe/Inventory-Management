@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
-import { collection, query, where, onSnapshot } from "firebase/firestore"
+import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore"
 import { db } from '../firebase_config'
 import { Link } from 'react-router-dom'
 import { CSVLink } from 'react-csv'
@@ -34,7 +34,7 @@ const Department = ({ lab, nav }) => {
 			});
 		}
 		else {
-			q = query(collection(db, "INVENTORY"), where("department", "==", department));
+			q = query(collection(db, "INVENTORY"), where("department", "==", department), orderBy("InwardNo"));
 			const unsubscribe = onSnapshot(q, (querySnapshot) => {
 				let arr = []
 				querySnapshot.forEach((doc) => {
@@ -181,11 +181,11 @@ const Department = ({ lab, nav }) => {
 							results.length === 0 ? <p>{"No Results Found"}</p> : results.map(({ data, id }, i) => {
 								return <div data-title={data.user} className={data.Scrap ? "title bg-red-700 bg-opacity-50" : "title"}>
 									<tr  key={id} className={i === results.length - 1 ? 'grid grid-cols-6  justify-items-center p-3 bg-gray-500 bg-opacity-30 ' : 'grid grid-cols-6 justify-items-center p-3 border-b bg-gray-500 bg-opacity-30 '}>
-										<td>{data.InwardNo}</td>
-										<td>{data.TagNo}</td>
-										<td>{data.Lab}</td>
-										<td>{data.EquipmentName}</td>
-										<td>{data.Specifications}</td>
+										<td>{data.InwardNo || "--"}</td>
+										<td>{data.TagNo || "--"}</td>
+										<td>{data.Lab || "--"}</td>
+										<td>{data.EquipmentName || "--"}</td>
+										<td>{data.Specifications || "--"}</td>
 										<td><Link className='text-blue-500 underline cursor-pointer' to={`/equipment/${id}`}>{'Visit'}</Link></td>
 									</tr>
 								</div>

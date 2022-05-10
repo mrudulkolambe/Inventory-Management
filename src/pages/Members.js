@@ -53,19 +53,17 @@ const Members = ({ nav }) => {
 	const handleDropdownChange = async (uid, type) => {
 		changePermission(uid, type)
 	}
-	const handleDepartment = () => {
-
-	}
 	return (
 		<>
 			<ConfirmationModal modalHandle={setShowModal} handleOkay={handleDropdownChange} showModal={showModal} data={modalData} />
 			<div className='h-full w-full flex justify-center'>
 				<table className='table-auto w-11/12 mt-16 flex flex-col text-white'>
 					<thead className='bg-gray-500 bg-opacity-40 mb-3 rounded-lg'>
-						<tr className='grid grid-cols-4 font-bold w-full justify-between p-3 text-lg'>
+						<tr className='grid grid-cols-5 font-bold w-full justify-between p-3 text-lg'>
 							<th className='m-auto'>Name</th>
 							<th className='m-auto'>Email</th>
 							<th className='m-auto'>Department</th>
+							<th className='m-auto'>Authorized</th>
 							<th className='m-auto'>Manage User</th>
 						</tr>
 					</thead>
@@ -73,10 +71,11 @@ const Members = ({ nav }) => {
 						{
 							members && members.map((member, i) => {
 								return (
-									<tr key={member.uid} onDoubleClick={() => { navigate(`/user/${member.uid}`) }} className={i === members.length - 1 ? "grid grid-cols-4 w-full justify-between p-3" : 'relative grid grid-cols-4 w-full justify-between p-3 border-b-2'}>
+									<tr key={member.uid} onDoubleClick={() => { navigate(`/user/${member.uid}`) }} className={i === members.length - 1 ? "grid grid-cols-5 w-full justify-between p-3" : 'relative grid grid-cols-5 w-full justify-between p-3 border-b-2'}>
 										<td className='m-auto cursor-pointer members_title' data-title="Click To Copy" onClick={(e) => { handleCopy(e.target.innerHTML, "Name", e, member.name) }}>{member.name}</td>
 										<td className='m-auto cursor-pointer members_title' data-title="Click To Copy" onClick={(e) => { handleCopy(e.target.innerHTML, "Email", e, member.email) }}>{member.email}</td>
 										<td className='m-auto flex items-center'>{member.department}</td>
+										<td className='m-auto flex items-center'>{member.isVerified ? "Granted" : "Pending"}</td>
 										<Dropdown update={handleUpdate} member={member} selected={member.admin} />
 									</tr>
 								)

@@ -162,3 +162,8 @@ table input{
   }
 }
 
+
+#file-upload-button{
+  display: none !important;
+  background-color: transparent;
+}

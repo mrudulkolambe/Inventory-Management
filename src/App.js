@@ -25,6 +25,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import WaitingForConfirmation from './pages/WaitingForConfirmation';
 import Users from './pages/Users';
+import ImportXLXS from './pages/ImportXLXS';
 
 function App() {
   const [hideNavbar, setHideNavbar] = useState(false);
@@ -73,6 +74,7 @@ function App() {
             <Route path="/reset-password" exact element={<ResetPassword setHideNavbar={setNav}/>} />
             <Route path="/wait-for-confirmation" exact element={<WaitingForConfirmation nav={setNav}/>} />
             <Route path="/authorize-user" exact element={<Users nav={setNav}/>} />
+            <Route path="/xlxs" exact element={<ImportXLXS nav={setNav}/>} />
             {/* <Route path="/profile" exact element={<Profile/>} /> */}
           </Routes>
         </div>

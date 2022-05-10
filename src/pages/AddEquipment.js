@@ -33,6 +33,8 @@ const AddEquipment = ({nav}) => {
 		ScrapDate: null,
 		BillNumber: "",
 		TotalIncTaxes: "",
+		Model: "",
+		Model_SerialNo: "",
 		date: getDate(),
 		timestamp: serverTimestamp(),
 		user: ""
@@ -226,6 +228,28 @@ const AddEquipment = ({nav}) => {
 							/>
 						</div>
 					</div>
+					<div className='w-full flex justify-between'>
+						<div className='w-full my-2 flex flex-col'>
+							<label className='text-white'>Model : </label>
+							<input
+								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="text"
+								name='Model'
+								value={data.Model} onChange={handleForm}
+								placeholder="Model"
+							/>
+						</div>
+						<div className='w-full my-2 flex flex-col items-end'>
+							<label className='text-white self-start ml-9'>Model Serial No. : </label>
+							<input
+								className="w-11/12 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+								type="text"
+								name='Model_SerialNo'
+								value={data.Model_SerialNo} onChange={handleForm}
+								placeholder="Model Serial No."
+							/>
+						</div>
+					</div>
 				</div>
 				<div className='w-7/12 my-2 flex flex-col m-auto'>
 					<label className='text-white'>Total Cost Incl. Taxes : </label>
@@ -246,7 +270,7 @@ const AddEquipment = ({nav}) => {
 						value={data.Specifications} onChange={handleForm}
 						placeholder="Specifications Of Equipment"
 					></textarea>
-					<button ref={btn} className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={() => {
+					<button ref={btn} className="mt-5 mb-10 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={() => {
 						addData()
 					}}
 						type="button">
