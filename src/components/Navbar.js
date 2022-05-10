@@ -13,6 +13,7 @@ export default function Navbar({ nav }) {
   }
   const { logOut, user } = useUserAuth()
   const { admin, isVerified } = useUserContext()
+  const [firstName, SetfirstName] = useState("");
   const location = useLocation()
 
   const InitialState = [
@@ -60,6 +61,7 @@ export default function Navbar({ nav }) {
     if (!isVerified) {
       setNavigation([])
     }
+    user && SetfirstName(user.displayName.split(" ")[0])
   }, [admin, user, nav, isVerified]);
   return (
     <Disclosure as="nav" className="bg-gray-700  w-full top-0">
@@ -106,13 +108,16 @@ export default function Navbar({ nav }) {
                 {user ?
                   <Menu as="div" className="ml-3 relative">
                     <div>
-                      <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                      <Menu.Button className="bg-gray-400 bg-opacity-20 text-sm rounded-lg flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png"
-                          alt=""
-                        />
+                        <div className='items-center text-white py-1 px-2 flex'>
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png"
+                            alt=""
+                          />
+                          <p className='ml-2 font-bold'>{firstName}</p>
+                        </div>
                       </Menu.Button>
                     </div>
                     <Transition
