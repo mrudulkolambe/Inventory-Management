@@ -167,3 +167,7 @@ table input{
   display: none !important;
   background-color: transparent;
 }
+
+.w-table{
+  width: 98%;
+}
