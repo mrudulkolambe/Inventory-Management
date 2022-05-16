@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase_config";
 
 const changePermission = async (uid, type) => {
@@ -11,9 +11,9 @@ const changePermission = async (uid, type) => {
 				await updateDoc(doc(db, "ADMIN", "ADMIN"), {
 					ADMINS: arrayUnion(uid)
 				})
-					// .then(() => {
-					// 	setShowModal(false)
-					// })
+				// .then(() => {
+				// 	setShowModal(false)
+				// })
 			})
 	}
 	else if (type === "USER") {
@@ -25,9 +25,15 @@ const changePermission = async (uid, type) => {
 				await updateDoc(doc(db, "ADMIN", "ADMIN"), {
 					ADMINS: arrayRemove(uid)
 				})
-					// .then(() => {
-					// 	setShowModal(false)
-					// })
+				// .then(() => {
+				// 	setShowModal(false)
+				// })
+			})
+	}
+	else if (type === "delete") {
+		await deleteDoc(doc(db, "USERS", uid))
+			.then(() => {
+				console.log("deleted")
 			})
 	}
 }

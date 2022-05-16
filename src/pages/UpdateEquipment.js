@@ -18,7 +18,7 @@ import { utils, write } from "xlsx";
 import FileSaver from "file-saver";
 import { useUserAuth } from "../context/UserAuthContext";
 import { useUserContext } from "../context/UseMembersContext";
-import { XIcon } from "@heroicons/react/outline";
+import { PlusIcon, XIcon } from "@heroicons/react/outline";
 
 const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
   nav(true)
@@ -44,6 +44,7 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
   const [department, setDepartment] = useState("")
   const [labs, setLabs] = useState([])
   const [labData, setLabData] = useState("")
+  const [showFiles, setShowFiles] = useState(false)
   const InitialState = {
     SN: "",
     TestingDate: "",
@@ -74,10 +75,15 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
   };
 
   const xlsConvert = () => {
-    setShowDropdown(false);
     const headers = Object.keys(equipment.data);
     const body = Object.values(equipment.data);
-    const worksheet1 = utils.json_to_sheet([headers, body]);
+    let string = ""
+    let finalBody = body
+    body[6].forEach((file) => {
+      string += file.url + " "
+    })
+    finalBody[6] = string
+    const worksheet1 = utils.json_to_sheet([headers, finalBody]);
     const worksheet2 = utils.json_to_sheet(arr);
     const excelBuffer = write(
       {
@@ -253,6 +259,29 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
   const [showShift, setShowShift] = useState(false)
   return (
     <>
+      <div className={showFiles ? "h-screen w-screen absolute z-40 zindex1000 bg-black bg-opacity-40" : "hidden"}></div>
+      <div className={showFiles ? "h-80 w-7/12 bg-white zindex2000 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl shadow-xl" : "hidden"}>
+        <div className="p-3 flex justify-between items-center border-b">
+          <p className="font-bold text-lg">Uploaded Files</p>
+          <p className="invisible flex items-center cursor-pointer"><PlusIcon className="mr-2 h-6 w-6 text-black cursor-pointer" />Add Files</p>
+          <XIcon className="h-6 w-6 text-black cursor-pointer" onClick={() => { setShowFiles(false) }} />
+        </div>
+        {
+          equipment && equipment.data.files.length === 0 ? <h1 className="font-bold text-center text-2xl">No Files Found</h1> :
+            <div className="flex flex-col overflow-auto h-64">
+              {
+                equipment && equipment.data.files.map((file) => {
+                  return <>
+                    <div className="my-1 w-full px-4 flex items-center">
+                      <p className="my-1 w-40 overflow-hidden text-ellipsis whitespace-nowrap">{file.name}</p>
+                      <a href={file.url} target="_blank" className="ml-3 text-blue-500 underline underline-offset-1">Visit</a>
+                    </div>
+                  </>
+                })
+              }
+            </div>
+        }
+      </div>
       <div className={showShift ? "w-screen h-screen bg-black bg-opacity-40 fixed zindex1000" : "hidden"}></div>
       <div className={showShift ? "duration-300 opacity-100 drop-shadow-lg zindex2000 bg-white h-2/6 rounded-lg p-4 w-4/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" : "duration-300 drop-shadow-lg zindex2000 bg-white h-2/6 rounded-lg p-4 w-4/12 absolute top-0 opacity-0 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden"}>
         <div className="border-b relative pb-3">
@@ -469,17 +498,7 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
           </table>
         </div>
         <div className="flex justify-between items-center m-auto w-screen px-6">
-          <button
-            onClick={handleInputForm}
-            className={
-              hide
-                ? "hidden"
-                : "invisible my-7 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-40 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-            }
-          >
-            {showInputs ? "Hide" : "Add Log"}
-          </button>
-
+          <button onClick={() => { showFiles ? setShowFiles(false) : setShowFiles(true) }}>Show Uploaded Documents</button>
           <button
             onClick={handleInputForm}
             className={
@@ -502,9 +521,9 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
               onFocus={() => {
                 setShowDropdown(true);
               }}
-              onBlur={() => {
-                setShowDropdown(false);
-              }}
+            // onBlur={() => {
+            //   setShowDropdown(false);
+            // }}
             >
               Export As
               <svg
@@ -529,7 +548,6 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
                   ? "w-full text-center dropdown-menu min-w-max absolute text-base z-50 float-left py-2 list-none rounded-lg shadow-2xl m-0 bg-clip-padding border-none bg-gray-800 bg-opacity-95"
                   : "hidden"
               }
-              aria-labelledby="dropdownMenuButton2"
             >
               <span className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300">
                 <li className="rounded overflow-hidden cursor-pointer">
@@ -546,7 +564,6 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
                   <a
                     className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
                     onClick={() => {
-                      setShowDropdown(false);
                       setTimeout(() => {
                         window.print();
                       }, 1000);
@@ -678,8 +695,8 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
                       key={report.SN}
                       className={
                         i === 0
-                          ? "items-center grid grid-cols-8 justify-between p-3 border-b m-auto zindex2000 bg-gray-500 bg-opacity-30 overflow-hidden rounded-t-lg"
-                          : "items-center grid grid-cols-8 justify-between p-3 border-b m-auto zindex2000 bg-gray-500 bg-opacity-30 overflow-hidden"
+                          ? "items-center grid grid-cols-8 justify-between p-3 border-b m-auto z-50 bg-gray-500 bg-opacity-30 overflow-hidden rounded-t-lg"
+                          : "items-center grid grid-cols-8 justify-between p-3 border-b m-auto z-50 bg-gray-500 bg-opacity-30 overflow-hidden"
                       }
                     >
                       <td className="w-11/12">{report.SN}</td>

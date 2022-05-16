@@ -78,12 +78,10 @@ export function UserAuthContextProvider({ children }) {
 			setUser(currentuser);
 			if (!currentuser) {
 				navigate(`/login`);
-			}
-			else {
-				navigate('/')
+			} else {
+				return
 			}
 		});
-
 		return () => {
 			unsubscribe();
 		};

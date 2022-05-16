@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useUserContext } from '../context/UseMembersContext'
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, updateDoc, doc } from "firebase/firestore";
 import { db } from '../firebase_config';
 import Alert from '../components/Alert';
 import { useUserAuth } from '../context/UserAuthContext';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 
-const AddEquipment = ({nav}) => {
+const AddEquipment = ({ nav }) => {
 	nav(true)
 	document.title = "SIGCE Inventory | Add Equipment"
 	const { departmentArray, equipmentCheck, items, getDate, allDepts, equipmentItem } = useUserContext()
@@ -14,6 +15,8 @@ const AddEquipment = ({nav}) => {
 	const [alertType, setAlertType] = useState("blue");
 	const [labs, setLabs] = useState([]);
 	const { user } = useUserAuth()
+	const [files, setFiles] = useState([])
+	const [progress, setProgress] = useState(0)
 	const InitialState = {
 		department: "",
 		Lab: "",
@@ -37,7 +40,8 @@ const AddEquipment = ({nav}) => {
 		Model_SerialNo: "",
 		date: getDate(),
 		timestamp: serverTimestamp(),
-		user: ""
+		user: "",
+		files: []
 	}
 	const [data, setData] = useState(InitialState);
 	useEffect(() => {
@@ -63,11 +67,19 @@ const AddEquipment = ({nav}) => {
 			clearTimeout(timeout);
 		}, 10);
 	};
-
+	const handleFileInputChange = (e) => {
+		let arr = [];
+		setProgress(0)
+		for (let i = 0; i < e.target.files.length; i++) {
+			arr.push(e.target.files[i]);
+		}
+		setFiles(arr);
+	};
 
 	const [btnText, setBtnText] = useState("Add Equipment");
 	const [message, setMessage] = useState("");
 	const addData = async () => {
+		let arr = []
 		if (data.Lab.length < 3 && data.EquipmentName.length < 3 && data.Supplier.length < 3 && data.DateOfPurchase.length < 3 && data.Specifications.length < 3) {
 			call_alert("Please Fill The Form Properly", "red")
 		}
@@ -81,23 +93,51 @@ const AddEquipment = ({nav}) => {
 				let newData = data;
 				newData.user = user.displayName
 				newData.TagNo = data.TagNo.toUpperCase()
+				const storage = getStorage();
+				newData.files = arr
 				await addDoc(collection(db, "INVENTORY"), newData)
-					.then(() => {
+					.then(async (document) => {
+						console.log(document.id)
 						equipmentCheck(data.TagNo)
 						setBtnText("Equipment Added")
 						setData(InitialState)
 						call_alert("Equipment Added", "blue")
+						files.forEach((file) => {
+							const storageRef = ref(storage, `${data.department}/${document.id}/${file.name}`);
+							const uploadTask = uploadBytesResumable(storageRef, file)
+							uploadTask.on('state_changed',
+								(snapshot) => {
+									const progressPer = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+									setProgress(progressPer)
+								},
+								(error) => {
+									console.log(error)
+								},
+								() => {
+									getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+										const obj = {
+											name: file.name,
+											url: downloadURL
+										}
+										arr.push(obj)
+										await updateDoc(doc(db, "INVENTORY", `${document.id}`), {
+											files: arr
+										}).then(() => {
+											console.log("updated")
+										})
+									});
+								}
+							);
+						})
 						setTimeout(() => {
 							btn.current.disabled = false;
 							setBtnText("Add Equipment")
 						}, 2000);
 					})
-					.catch((error) => {
-						console.log(error)
-					})
 			}
 		}
 	}
+
 	const handleForm = (e) => {
 		const name = e.target.name
 		setData({ ...data, [name]: e.target.value })
@@ -260,6 +300,20 @@ const AddEquipment = ({nav}) => {
 						value={data.TotalIncTaxes} onChange={handleForm}
 						placeholder="Total Cost Incl. Taxes"
 					/>
+				</div>
+				<div className='w-7/12 my-2 flex flex-col m-auto'>
+					<label className='text-white'>Upload Files : </label>
+					<input
+						className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white my-1"
+						type="file"
+						name='TotalIncTaxes'
+						onChange={handleFileInputChange}
+						placeholder="Total Cost Incl. Taxes"
+						multiple
+					/>
+				</div>
+				<div className='bg-gray-300 h-2 rounded-lg w-7/12 my-2 flex flex-col m-auto'>
+					<div className='bg-green-500 h-2 w-20 rounded-lg duration-200' style={{ width: progress + "%" }}></div>
 				</div>
 				<div className='w-7/12 my-2 flex flex-col m-auto'>
 					<label className='text-white'>Specifications Of Equipment : </label>

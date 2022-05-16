@@ -74,7 +74,7 @@ export default function Navbar({ nav }) {
                   )}
                 </Disclosure.Button>
               </div>
-              <Link to={"/"} className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start cursor-pointer">
+              <p className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start cursor-pointer">
                 <div className="flex-shrink-0 flex items-center mr-7">
                   <img
                     className="hidden lg:block h-10 w-auto"
@@ -95,7 +95,7 @@ export default function Navbar({ nav }) {
                     ))}
                   </div>
                 </div>
-              </Link>
+              </p>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                 {/* Profile dropdown */}

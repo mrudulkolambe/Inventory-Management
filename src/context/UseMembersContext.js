@@ -3,7 +3,7 @@ import { db } from "../firebase_config"
 import { collection, query, onSnapshot, doc, updateDoc, arrayUnion, orderBy } from "firebase/firestore";
 import { useUserAuth } from "./UserAuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { deleteUser, getAuth, signOut } from "firebase/auth";
 
 
 const userMembersContext = createContext();
@@ -17,7 +17,7 @@ export function UserMemberContextProvider({ children }) {
 	const [departmentArray, setdepartmentArray] = useState([]);
 	const [allDepts, setAllDepts] = useState([])
 	const [equipmentItem, setEquipmentItem] = useState([])
-	const [userData, setUserData] = useState({})
+	const [userData, setUserData] = useState()
 	const [allDeptArr, setAllDeptArr] = useState([])
 	const [isVerified, setIsVerified] = useState()
 
@@ -47,10 +47,7 @@ export function UserMemberContextProvider({ children }) {
 			return
 		}
 		else {
-			if (isVerified) {
-				navigate("/")
-			}
-			else {
+			if (!isVerified) {
 				navigate("/wait-for-confirmation")
 			}
 		}
@@ -61,9 +58,19 @@ export function UserMemberContextProvider({ children }) {
 				setAdmin(doc.data().ADMINS);
 			});
 			const unsub4 = onSnapshot(doc(db, "USERS", user.uid), (doc) => {
-				setUserData(doc.data());
-				setIsVerified(doc.data().isVerified)
-			});
+				setUserData(doc.data())
+				if (doc.data()) { setIsVerified(doc.data().isVerified) }
+				else {
+					const auth = getAuth();
+					const currentUser = auth.currentUser
+					deleteUser(currentUser).then(() => {
+						// User deleted.
+					}).catch((error) => {
+						// An error ocurred
+						// ...
+					});
+				}
+			})
 			const unsub1 = onSnapshot(doc(db, "EQUIPMENTS", "TAGNO"), (doc) => {
 				setItems(doc.data().TAGNO)
 			});
@@ -102,12 +109,12 @@ export function UserMemberContextProvider({ children }) {
 		const unsub1 = onSnapshot(doc(db, "DEPARTMENTS", "DEPARTMENTS"), (doc) => {
 			let newArr = []
 			setAllDeptArr(doc.data().DEPARTMENTS)
-			if (userData.department === "ALL" || userData.admin) {
+			if (userData && userData.department === "ALL" || userData && userData.admin) {
 				setdepartmentArray(doc.data().DEPARTMENTS)
 			}
 			else {
 				doc.data().DEPARTMENTS.map((department) => {
-					if (userData.department === department) {
+					if (userData && userData.department === department) {
 						newArr.push(department)
 					}
 					else if (department === "") {

@@ -36,6 +36,7 @@ const ImportXLXS = ({ nav }) => {
 				newData.user = user.displayName
 				newData.TagNo = row.TagNo.toUpperCase()
 				newData.timestamp = serverTimestamp()
+				newData.files = []
 				await addDoc(collection(db, "INVENTORY"), newData)
 					.then(async () => {
 						console.log("added1", i)
