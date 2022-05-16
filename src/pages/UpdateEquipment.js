@@ -519,12 +519,7 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
                   : "my-3 tracking-wide font-semibold bg-green-600 text-gray-100 w-40 py-3 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
               }
               type="button"
-              onFocus={() => {
-                setShowDropdown(true);
-              }}
-            // onBlur={() => {
-            //   setShowDropdown(false);
-            // }}
+              onClick={() => { showDropdown ? setShowDropdown(false) : setShowDropdown(true) }}
             >
               Export As
               <svg
