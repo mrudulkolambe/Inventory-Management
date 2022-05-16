@@ -75,6 +75,7 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
   };
 
   const xlsConvert = () => {
+    setShowDropdown(false)
     const headers = Object.keys(equipment.data);
     const body = Object.values(equipment.data);
     let string = ""
@@ -564,6 +565,7 @@ const UpdateEquipment = ({ hide, searchHide, title, nav }) => {
                   <a
                     className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700 active:bg-blue-600"
                     onClick={() => {
+                      setShowDropdown(false)
                       setTimeout(() => {
                         window.print();
                       }, 1000);
